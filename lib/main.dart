@@ -39,24 +39,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  
   var _currentPage = 0;
 
   final List<Widget> _pages = [
-    const All(),
+    All(show: allShows[0]),
     const Watching(),
     const OnHold(),
     const Planned(),
     const Dropped(),
     const Completed()
   ];
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   var _selectedIndex = 0;
 
