@@ -17,6 +17,8 @@ class Show{
   
   get epsTotal => null;
 
+  get status => null;
+
   set epsCompleted(int value) {
     epsCompleted = value;
   }

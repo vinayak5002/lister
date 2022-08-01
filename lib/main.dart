@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
 
 import 'Pages/Completed.dart';
@@ -18,8 +19,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
 
@@ -77,6 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+  @override
+  void initState() {
+    super.initState();
+    distribute();
+  }
 
     return Scaffold(
 			appBar: AppBar(
