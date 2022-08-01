@@ -1,5 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lister/Pages/All.dart';
+
+import 'Pages/Completed.dart';
+import 'Pages/Dropped.dart';
+import 'Pages/OnHold.dart';
+import 'Pages/Planned.dart';
+import 'Pages/Watching.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +41,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  
+  var _currentPage = 0;
+
+  final List<Widget> _pages = [
+    const All(),
+    const Watching(),
+    const OnHold(),
+    const Planned(),
+    const Dropped(),
+    const Completed()
+  ];
 
   void _incrementCounter() {
     setState(() {
@@ -45,6 +65,14 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  selectDrawerItem(BuildContext context, int i) {
+    setState(() {
+      _currentPage = i;
+    });
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -71,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(
                 Icons.menu,
                 color: Colors.redAccent,
+                size: 35,
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
@@ -83,49 +112,44 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           // padding: notchInset,
-          children: const [
+          children: [
             ListTile(
               leading: Icon(Icons.list),
               title: Text('All'),
+              onTap: () => selectDrawerItem(context, 0),
             ),
             ListTile(
               leading: Icon(CupertinoIcons.clock),
               title: Text('Watching'),
+              onTap: () => selectDrawerItem(context, 1),
             ),
             ListTile(
               leading: Icon(Icons.stop),
               title: Text('On-hold'),
+              onTap: () => selectDrawerItem(context, 2),
             ),
             ListTile(
               leading: Icon(CupertinoIcons.cart),
               title: Text('Planned'),
+              onTap: () => selectDrawerItem(context, 3),
             ),
             ListTile(
               leading: Icon(Icons.cancel),
               title: Text('Dropped'),
+              onTap: () => selectDrawerItem(context, 4),
             ),
             ListTile(
               leading: Icon(Icons.check),
               title: Text('Completed'),
+              onTap: () => selectDrawerItem(context, 5),
             ),
           ],
         ),
       ),
 			
 			body: Center(
-				child: Column(
-					mainAxisAlignment: MainAxisAlignment.center,
-					children: <Widget>[
-						const Text(
-							'You have pushed the button this many times:',
-						),
-						Text(
-							'$_counter',
-							style: Theme.of(context).textTheme.headline4,
-						),
-					],
-				),
+				child: _pages[_currentPage],
 			),
 		);
-  }
+  }    
 }
