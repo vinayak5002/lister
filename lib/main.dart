@@ -1,21 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData.dark(),
+      home: const MyHomePage(title: 'Lister'),
     );
   }
 }
@@ -37,31 +39,93 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  var _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+			appBar: AppBar(
+				title: Text(
+          widget.title,
+          textScaleFactor: 1.5,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.redAccent,
+          ),
+        ),
+
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[850],
+
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.redAccent,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+
+      drawer: Drawer(
+        child: ListView(
+          // padding: notchInset,
+          children: const [
+            ListTile(
+              leading: Icon(Icons.list),
+              title: Text('All'),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            ListTile(
+              leading: Icon(CupertinoIcons.clock),
+              title: Text('Watching'),
+            ),
+            ListTile(
+              leading: Icon(Icons.stop),
+              title: Text('On-hold'),
+            ),
+            ListTile(
+              leading: Icon(CupertinoIcons.cart),
+              title: Text('Planned'),
+            ),
+            ListTile(
+              leading: Icon(Icons.cancel),
+              title: Text('Dropped'),
+            ),
+            ListTile(
+              leading: Icon(Icons.check),
+              title: Text('Completed'),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+			
+			body: Center(
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: <Widget>[
+						const Text(
+							'You have pushed the button this many times:',
+						),
+						Text(
+							'$_counter',
+							style: Theme.of(context).textTheme.headline4,
+						),
+					],
+				),
+			),
+		);
   }
 }
