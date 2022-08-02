@@ -42,24 +42,26 @@ class _MyHomePageState extends State<MyHomePage> {
   var _currentPage = 0;
 
   final List<Widget> _pages = [
-    All(shows: allShows),
-    const Watching(),
-    const OnHold(),
-    const Planned(),
-    const Dropped(),
-    const Completed()
+    All(),
+    Watching(),
+    OnHold(),
+    Planned(),
+    Dropped(),
+    Completed()
   ];
 
   var _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
+      distribute();
       _selectedIndex = index;
     });
   }
 
   selectDrawerItem(BuildContext context, int i) {
     setState(() {
+      distribute();
       _currentPage = i;
     });
 
@@ -69,11 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-  @override
-  void initState() {
-    super.initState();
-    distribute();
-  }
+    @override
+    void initState() {
+      super.initState();
+      distribute();
+    }
 
     return Scaffold(
 			appBar: AppBar(

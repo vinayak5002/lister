@@ -1,22 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:lister/Data/data.dart';
 import 'package:lister/Widgets/ShowTile.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import '../Data/data.dart';
 import '../Models/Show.dart';
 
-class All extends StatelessWidget {
-  const All({Key? key, required this.shows}) : super(key: key);
+class All extends StatefulWidget {
+  All({Key? key}) : super(key: key);
   
-  final List<Show> shows;
+  @override
+  State<All> createState() => _AllState();
+}
 
+class _AllState extends State<All> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: shows.length,
-      itemBuilder: (context, index) {
-        return ShowTile(show: shows[index]);
-      },
-    );
+
+    List<Show> shows;
+    if(allShows.isEmpty){
+      shows = <Show>[];
+    } else {
+      shows = allShows;
+    }
+    @override
+    void initState() {
+      super.initState();
+      distribute();
+      shows = allShows;
+    }
+
+    if(shows.isEmpty){
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "No shows",
+              style: TextStyle(
+                color: Colors.grey,
+              )
+            ),
+            Image.asset(
+              "assets/images/done.png",
+              height: 200,
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+      return ListView.builder(
+        itemCount: shows.length,
+        itemBuilder: (context, index) {
+          return ShowTile(
+            show: shows[index],
+          );
+        },
+      );
+    }
   }
 }

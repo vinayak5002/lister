@@ -8,29 +8,36 @@ var allShows = [
   Show(title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned),
 ];
 
-var watchingShows = [];
-var onHoldShows = [];
-var plannedShows = [];
-var droppedShows = [];
-var completedShows = [];
+List<Show> watchingShows = [];
+List<Show> onHoldShows = [];
+List<Show> plannedShows = [];
+List<Show> droppedShows = [];
+List<Show> completedShows = [];
 
 void distribute(){
-  for(int i=0; i<allShows.length; i++){
-    switch(allShows[i].status){
+  print("Distributing...");
+  watchingShows.clear();
+  onHoldShows.clear();
+  plannedShows.clear();
+  droppedShows.clear();
+  completedShows.clear();
+
+  for(Show show in allShows){
+    switch(show.status){
       case ShowStatus.watching:
-        watchingShows.add(allShows[i]);
+        watchingShows.add(show);
         break;
       case ShowStatus.onHold:
-        onHoldShows.add(allShows[i]);
+        onHoldShows.add(show);
         break;
       case ShowStatus.planned:
-        plannedShows.add(allShows[i]);
+        plannedShows.add(show);
         break;
       case ShowStatus.dropped:
-        droppedShows.add(allShows[i]);
+        droppedShows.add(show);
         break;
       case ShowStatus.completed:
-        completedShows.add(allShows[i]);
+        completedShows.add(show);
         break;
     }
   }
