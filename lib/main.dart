@@ -50,15 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Completed()
   ];
 
-  var _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      distribute();
-      _selectedIndex = index;
-    });
-  }
-
   selectDrawerItem(BuildContext context, int i) {
     setState(() {
       distribute();
@@ -86,7 +77,22 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.bold,
             color: Colors.redAccent,
           ),
+          
         ),
+
+        actions: [
+          Padding(
+            padding: EdgeInsets.all(18),
+            child: Text(
+              getCount(_currentPage).toString(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
 
         centerTitle: true,
         elevation: 0,

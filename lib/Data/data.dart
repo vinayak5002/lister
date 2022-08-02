@@ -42,3 +42,22 @@ void distribute(){
     }
   }
 }
+
+int getCount(int index){
+  switch(index){
+    case 0:
+      return allShows.length;
+    case 1:
+      return watchingShows.length;
+    case 2:
+      return onHoldShows.length;
+    case 3:
+      return plannedShows.length;
+    case 4:
+      return droppedShows.length;
+    case 5:
+      return completedShows.length;
+  }
+
+  return 0;
+}
