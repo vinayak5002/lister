@@ -3,7 +3,7 @@ import 'package:lister/Models/StatusEnum.dart';
 import '../Models/Show.dart';
 
 var allShows = [
-  Show(title: "Naruto", epsCompleted: 220, epsTotal: 220, status: ShowStatus.completed),
+  Show(title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed),
   Show(title: "Ya Boy Koming!", epsCompleted: 8, epsTotal: 12, status: ShowStatus.watching),
   Show(title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned),
 ];
