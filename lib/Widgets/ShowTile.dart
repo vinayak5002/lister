@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../Models/Show.dart';
 
 class ShowTile extends StatelessWidget {
-  const ShowTile({Key? key, required this.show}) : super(key: key);
+  ShowTile({Key? key, required this.show}) : super(key: key);
 
   final Show show;
+
+  late final status = displayStatus(show.status);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
 
       child: Card(
         color: const Color.fromRGBO(33, 33, 33, 1),
@@ -49,12 +52,20 @@ class ShowTile extends StatelessWidget {
                     ),
                   ),
 
+                  SizedBox(height: 5,),
+
+                  Row(
+                    children: [
+                      status[1],
+                      SizedBox(width: 5,),
+                      Text(status[0]),
+                    ],
+                  ),
+
                   Row(
                     children: [
                       Expanded(
                         child: StepProgressIndicator(
-                          // totalSteps: show.epsCompleted,
-                          // currentStep: show.epsTotal,
                           totalSteps: show.epsTotal,
                           currentStep: show.epsCompleted,
                           size: 8,

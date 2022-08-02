@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var _currentPage = 0;
 
   final List<Widget> _pages = [
-    All(show: allShows[0]),
+    All(shows: allShows),
     const Watching(),
     const OnHold(),
     const Planned(),
@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () => selectDrawerItem(context, 1),
             ),
             ListTile(
-              leading: Icon(Icons.stop),
+              leading: Icon(Icons.pause),
               title: Text('On-hold'),
               onTap: () => selectDrawerItem(context, 2),
             ),

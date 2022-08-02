@@ -6,16 +6,17 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../Models/Show.dart';
 
 class All extends StatelessWidget {
-  const All({Key? key, required this.show}) : super(key: key);
+  const All({Key? key, required this.shows}) : super(key: key);
   
-  final Show show;
+  final List<Show> shows;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ShowTile(show: show,)
-      ],
+    return ListView.builder(
+      itemCount: shows.length,
+      itemBuilder: (context, index) {
+        return ShowTile(show: shows[index]);
+      },
     );
   }
 }
