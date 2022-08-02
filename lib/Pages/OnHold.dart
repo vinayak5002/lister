@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
+import '../Widgets/ShowTile.dart';
 
 
 class OnHold extends StatefulWidget {
@@ -49,7 +50,14 @@ class _OnHoldState extends State<OnHold> {
       );
     }
     else{
-      return Text("On-hold");
+      return ListView.builder(
+        itemCount: shows.length,
+        itemBuilder: (context, index) {
+          return ShowTile(
+            show: shows[index],
+          );
+        },
+      );
     }
   }
 }

@@ -21,6 +21,25 @@ class _ShowTileState extends State<ShowTile> {
   Widget build(BuildContext context) {
     late final status = displayStatus(widget.show.status);
 
+    showModalSheet(){
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(widget.show.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+          TextButton(
+            onPressed: (){
+              setState(() {
+                setStatus(widget.show, ShowStatus.onHold);
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text("Move to onHold", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          )
+        ],
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
 
@@ -47,7 +66,16 @@ class _ShowTileState extends State<ShowTile> {
                           fontSize: 20,
                         ),
                       ),
-                      const Icon(Icons.more_vert, color: Colors.redAccent,)
+
+                      InkWell(
+                        child: Icon(Icons.more_vert, color: Colors.redAccent,),
+
+                        onTap: (){
+                          showModalBottomSheet(context: context, builder: (context){
+                            return showModalSheet();
+                          });
+                        },
+                      )
                     ],
                   ),
 

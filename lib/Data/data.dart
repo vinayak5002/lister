@@ -69,6 +69,9 @@ void increaseEps(Show show){
         sh.status = ShowStatus.watching;
       }
 
+      if(show.status == ShowStatus.onHold){
+        sh.status = ShowStatus.watching;
+      }
 
       sh.epsCompleted++;
 
@@ -85,8 +88,10 @@ void increaseEps(Show show){
 void setStatus(Show show, ShowStatus status){
   for(Show sh in allShows){
     if(sh == show){
-      sh.status = status;
-      distribute();
+      if(show.status != ShowStatus.completed){
+        sh.status = status;
+        distribute();
+      }
       return;
     }
   }
