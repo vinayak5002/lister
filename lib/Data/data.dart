@@ -61,3 +61,33 @@ int getCount(int index){
 
   return 0;
 }
+
+void increaseEps(Show show){
+  for(Show sh in allShows){
+    if(sh == show){
+      if(show.status == ShowStatus.planned){
+        sh.status = ShowStatus.watching;
+      }
+
+
+      sh.epsCompleted++;
+
+      if(show.epsTotal == show.epsCompleted){
+        sh.status = ShowStatus.completed;
+      }
+
+      distribute();
+      return;
+    }
+  }
+}
+
+void setStatus(Show show, ShowStatus status){
+  for(Show sh in allShows){
+    if(sh == show){
+      sh.status = status;
+      distribute();
+      return;
+    }
+  }
+}

@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lister/Models/StatusEnum.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import '../Data/data.dart';
 import '../Models/Show.dart';
 
-class ShowTile extends StatelessWidget {
+class ShowTile extends StatefulWidget {
   ShowTile({Key? key, required this.show}) : super(key: key);
 
   final Show show;
 
-  late final status = displayStatus(show.status);
+  @override
+  State<ShowTile> createState() => _ShowTileState();
+}
+
+class _ShowTileState extends State<ShowTile> {
 
   @override
   Widget build(BuildContext context) {
+    late final status = displayStatus(widget.show.status);
+
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
 
@@ -33,7 +41,7 @@ class ShowTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        show.title.toString(),
+                        widget.show.title.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -46,7 +54,7 @@ class ShowTile extends StatelessWidget {
                   const SizedBox(height: 5,),
 
                   Text(
-                    "${show.epsCompleted}/${show.epsTotal}",
+                    "${widget.show.epsCompleted}/${widget.show.epsTotal}",
                     style: const TextStyle(
                       fontSize: 14,
                     ),
@@ -57,7 +65,7 @@ class ShowTile extends StatelessWidget {
                   Row(
                     children: [
                       status[1],
-                      SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
                       Text(status[0]),
                     ],
                   ),
@@ -66,8 +74,8 @@ class ShowTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: StepProgressIndicator(
-                          totalSteps: show.epsTotal,
-                          currentStep: show.epsCompleted,
+                          totalSteps: widget.show.epsTotal,
+                          currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
                           size: 8,
                           padding: 0,
                           selectedColor: Colors.yellow,
@@ -86,9 +94,26 @@ class ShowTile extends StatelessWidget {
                         ),
                       ),
 
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.fromLTRB(6, 0, 0, 0),
-                        child: Icon(Icons.add, color: Colors.redAccent,),
+                        child: InkWell(
+                          onTap: () {
+                            if(widget.show.status == ShowStatus.planned){
+                              setState(() {
+                                widget.show.status = ShowStatus.watching;
+                              });
+                            }
+                            if(widget.show.epsCompleted < widget.show.epsTotal) {
+                              increaseEps(widget.show);
+                              setState(() {}); 
+                            }
+
+                          },
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.redAccent,
+                          ),
+                        ),
                       )
 
                     ],
