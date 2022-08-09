@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
 
+import 'Pages/AddPage.dart';
 import 'Pages/Completed.dart';
 import 'Pages/Dropped.dart';
 import 'Pages/OnHold.dart';
@@ -44,10 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     All(),
     Watching(),
-    OnHold(),
-    Planned(),
-    Dropped(),
-    Completed()
+    const OnHold(),
+    const Planned(),
+    const Dropped(),
+    const Completed()
   ];
 
   selectDrawerItem(BuildContext context, int i) {
@@ -82,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         actions: [
           Padding(
-            padding: EdgeInsets.all(18),
+            padding: const EdgeInsets.all(18),
             child: Text(
               getCount(_currentPage).toString(),
               style: const TextStyle(
@@ -119,33 +118,33 @@ class _MyHomePageState extends State<MyHomePage> {
           // padding: notchInset,
           children: [
             ListTile(
-              leading: Icon(Icons.list),
-              title: Text('All'),
+              leading: const Icon(Icons.list),
+              title: const Text('All'),
               onTap: () => selectDrawerItem(context, 0),
             ),
             ListTile(
-              leading: Icon(CupertinoIcons.clock),
-              title: Text('Watching'),
+              leading: const Icon(CupertinoIcons.clock),
+              title: const Text('Watching'),
               onTap: () => selectDrawerItem(context, 1),
             ),
             ListTile(
-              leading: Icon(Icons.pause),
-              title: Text('On-hold'),
+              leading: const Icon(Icons.pause),
+              title: const Text('On-hold'),
               onTap: () => selectDrawerItem(context, 2),
             ),
             ListTile(
-              leading: Icon(CupertinoIcons.cart),
-              title: Text('Planned'),
+              leading: const Icon(CupertinoIcons.cart),
+              title: const Text('Planned'),
               onTap: () => selectDrawerItem(context, 3),
             ),
             ListTile(
-              leading: Icon(Icons.cancel),
-              title: Text('Dropped'),
+              leading: const Icon(Icons.cancel),
+              title: const Text('Dropped'),
               onTap: () => selectDrawerItem(context, 4),
             ),
             ListTile(
-              leading: Icon(Icons.check),
-              title: Text('Completed'),
+              leading: const Icon(Icons.check),
+              title: const Text('Completed'),
               onTap: () => selectDrawerItem(context, 5),
             ),
           ],
@@ -155,6 +154,17 @@ class _MyHomePageState extends State<MyHomePage> {
 			body: Center(
 				child: _pages[_currentPage],
 			),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddPage()),
+          );
+        },
+        backgroundColor: Colors.redAccent,
+        child: const Icon(Icons.add, color: Colors.white,),
+      ),
 		);
   }    
 }

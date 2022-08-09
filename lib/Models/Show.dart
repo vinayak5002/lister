@@ -17,7 +17,7 @@ class Show{
     required this.epsCompleted,
     required this.epsTotal,
     this.status = ShowStatus.planned,
-    this.imageURL = defaultImage
+    required this.imageURL,
   }){
     if(epsCompleted == epsTotal){
       status = ShowStatus.completed;

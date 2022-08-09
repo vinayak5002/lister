@@ -84,114 +84,122 @@ class _ShowTileState extends State<ShowTile> {
         child: Padding(
           padding: const EdgeInsets.all(4.0),
 
-          child: Container(
-            width: 10000,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [  
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.show.title.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+          child: Row(
+            children: [
+              Image.network(widget.show.imageURL, height: 100, width: 100,),
+
+              Expanded(
+                child: Container(
+                  width: 10000,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [  
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.show.title.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+              
+                            InkWell(
+                              child: const Icon(Icons.more_vert, color: Colors.redAccent,),
+              
+                              onTap: (){
+                                showModalBottomSheet(context: context, builder: (context){
+                                  return showModalSheet();
+                                });
+                              },
+                            )
+                          ],
                         ),
-                      ),
-
-                      InkWell(
-                        child: const Icon(Icons.more_vert, color: Colors.redAccent,),
-
-                        onTap: (){
-                          showModalBottomSheet(context: context, builder: (context){
-                            return showModalSheet();
-                          });
-                        },
-                      )
-                    ],
-                  ),
-
-                  const SizedBox(height: 5,),
-
-                  Text(
-                    "${widget.show.epsCompleted}/${widget.show.epsTotal}",
-                    style: const TextStyle(
-                      fontSize: 14,
+              
+                        const SizedBox(height: 5,),
+              
+                        Text(
+                          "${widget.show.epsCompleted}/${widget.show.epsTotal}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+              
+                        const SizedBox(height: 5,),
+              
+                        Row(
+                          children: [
+                            status[1],
+                            const SizedBox(width: 5,),
+                            Text(status[0]),
+                          ],
+                        ),
+              
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StepProgressIndicator(
+                                totalSteps: widget.show.epsTotal,
+                                currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
+                                size: 8,
+                                padding: 0,
+                                selectedColor: Colors.yellow,
+                                unselectedColor: Colors.cyan,
+                                roundedEdges: const Radius.circular(10),
+                                selectedGradientColor: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [Colors.blue, Colors.green],
+                                ),
+                                unselectedGradientColor: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [Colors.grey, Colors.grey],
+                                ),
+                              ),
+                            ),
+              
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
+                              child: InkWell(
+                                onTap: () {
+                                  if(widget.show.status == ShowStatus.planned){
+                                    setState(() {
+                                      widget.show.status = ShowStatus.watching;
+                                      setStatus(widget.show, ShowStatus.watching);
+                                    });
+                                  }
+                                  if(widget.show.status == ShowStatus.dropped){
+                                    setState(() {
+                                      widget.show.status = ShowStatus.watching;
+                                      setStatus(widget.show, ShowStatus.watching);
+                                    });
+                                  }
+                                  if(widget.show.epsCompleted < widget.show.epsTotal) {
+                                    increaseEps(widget.show);
+                                    setState(() {}); 
+                                  }
+              
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                            )
+              
+                          ],
+                        ),
+              
+                      ],
                     ),
                   ),
-
-                  const SizedBox(height: 5,),
-
-                  Row(
-                    children: [
-                      status[1],
-                      const SizedBox(width: 5,),
-                      Text(status[0]),
-                    ],
-                  ),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: StepProgressIndicator(
-                          totalSteps: widget.show.epsTotal,
-                          currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
-                          size: 8,
-                          padding: 0,
-                          selectedColor: Colors.yellow,
-                          unselectedColor: Colors.cyan,
-                          roundedEdges: const Radius.circular(10),
-                          selectedGradientColor: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Colors.blue, Colors.green],
-                          ),
-                          unselectedGradientColor: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Colors.grey, Colors.grey],
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
-                        child: InkWell(
-                          onTap: () {
-                            if(widget.show.status == ShowStatus.planned){
-                              setState(() {
-                                widget.show.status = ShowStatus.watching;
-                                setStatus(widget.show, ShowStatus.watching);
-                              });
-                            }
-                            if(widget.show.status == ShowStatus.dropped){
-                              setState(() {
-                                widget.show.status = ShowStatus.watching;
-                                setStatus(widget.show, ShowStatus.watching);
-                              });
-                            }
-                            if(widget.show.epsCompleted < widget.show.epsTotal) {
-                              increaseEps(widget.show);
-                              setState(() {}); 
-                            }
-
-                          },
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.redAccent,
-                          ),
-                        ),
-                      )
-
-                    ],
-                  ),
-
-                ],
+                ),
               ),
-            ),
+            ],
           ),
 
         )
