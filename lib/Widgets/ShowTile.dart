@@ -22,22 +22,57 @@ class _ShowTileState extends State<ShowTile> {
     late final status = displayStatus(widget.show.status);
 
     showModalSheet(){
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(widget.show.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-          TextButton(
-            onPressed: (){
+      List<ShowStatus> modalButtons;
+
+      switch (widget.show.status) {
+        case ShowStatus.watching:
+          modalButtons = [
+            ShowStatus.onHold,
+            ShowStatus.dropped,
+          ];
+          break;
+        
+        case ShowStatus.onHold:
+          modalButtons = [
+            ShowStatus.watching,
+            ShowStatus.dropped,
+          ];
+          break;
+        
+        case ShowStatus.planned:
+          modalButtons = [
+            ShowStatus.watching,
+            ShowStatus.onHold,
+            ShowStatus.dropped,
+          ];
+          break;
+        
+        case ShowStatus.dropped:
+          modalButtons = [
+            ShowStatus.watching,
+            ShowStatus.onHold,
+            ShowStatus.planned,
+          ];
+          break;
+        default:
+          modalButtons = [];
+      }
+
+      return ListView.builder(
+        itemCount: modalButtons.length,
+        itemBuilder: (context, index) {
+          return TextButton(
+            child: Text("Change to ${displayStatus(modalButtons[index])[0]}"),
+            onPressed: () {
               setState(() {
-                setStatus(widget.show, ShowStatus.onHold);
+                setStatus(widget.show, modalButtons[index]);
               });
               Navigator.of(context).pop();
             },
-            child: Text("Move to onHold", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          )
-        ],
-      );
+          );
+        },
+        );
     }
 
     return Container(
@@ -68,7 +103,7 @@ class _ShowTileState extends State<ShowTile> {
                       ),
 
                       InkWell(
-                        child: Icon(Icons.more_vert, color: Colors.redAccent,),
+                        child: const Icon(Icons.more_vert, color: Colors.redAccent,),
 
                         onTap: (){
                           showModalBottomSheet(context: context, builder: (context){
@@ -88,7 +123,7 @@ class _ShowTileState extends State<ShowTile> {
                     ),
                   ),
 
-                  SizedBox(height: 5,),
+                  const SizedBox(height: 5,),
 
                   Row(
                     children: [
@@ -123,12 +158,19 @@ class _ShowTileState extends State<ShowTile> {
                       ),
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(6, 0, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
                         child: InkWell(
                           onTap: () {
                             if(widget.show.status == ShowStatus.planned){
                               setState(() {
                                 widget.show.status = ShowStatus.watching;
+                                setStatus(widget.show, ShowStatus.watching);
+                              });
+                            }
+                            if(widget.show.status == ShowStatus.dropped){
+                              setState(() {
+                                widget.show.status = ShowStatus.watching;
+                                setStatus(widget.show, ShowStatus.watching);
                               });
                             }
                             if(widget.show.epsCompleted < widget.show.epsTotal) {

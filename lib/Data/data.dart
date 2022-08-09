@@ -1,6 +1,8 @@
 import 'package:lister/Models/Show.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import '../Models/Show.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 var allShows = [
   Show(title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed),
@@ -15,7 +17,6 @@ List<Show> droppedShows = [];
 List<Show> completedShows = [];
 
 void distribute(){
-  print("Distributing...");
   watchingShows.clear();
   onHoldShows.clear();
   plannedShows.clear();
@@ -58,7 +59,6 @@ int getCount(int index){
     case 5:
       return completedShows.length;
   }
-
   return 0;
 }
 
@@ -94,5 +94,20 @@ void setStatus(Show show, ShowStatus status){
       }
       return;
     }
+  }
+}
+
+displayStatus(ShowStatus status){
+  switch(status){
+    case ShowStatus.watching:
+      return ["Watching", const Icon(CupertinoIcons.clock, size: 20, color: Colors.redAccent,),];
+    case ShowStatus.onHold:
+      return ["On Hold", const Icon(Icons.pause, size: 20, color: Colors.redAccent,)];
+    case ShowStatus.planned:
+      return ["Planned", const Icon(CupertinoIcons.cart, size: 20, color: Colors.redAccent,)];
+    case ShowStatus.dropped:
+      return ["Dropped", const Icon(Icons.cancel, size: 20, color: Colors.redAccent,)];
+    case ShowStatus.completed:
+      return ["Completed", const Icon(Icons.check, size: 20, color: Colors.redAccent,)];
   }
 }
