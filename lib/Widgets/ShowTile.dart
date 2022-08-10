@@ -89,7 +89,7 @@ class _ShowTileState extends State<ShowTile> {
               Image.network(widget.show.imageURL, height: 100, width: 100,),
 
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: 10000,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
