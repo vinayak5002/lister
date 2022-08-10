@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lister/Widgets/SearchTile.dart';
 
 import 'dart:convert';
 
+import 'package:lister/Widgets/SearchTile.dart';
 import 'package:http/http.dart' as API ;
-
 import 'package:lister/Data/constanst.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../Models/Show.dart';
 import '../Models/StatusEnum.dart';
@@ -46,10 +46,19 @@ List<Show> searchShows = [];
 
 class _PageState extends State<Page> {
 
+  bool isLoading = false;
 
   search(String query)async{
+    setState(() {
+      isLoading = true;
+    });
+
     API.Response response = await API.get( Uri.parse(kBaseURL + query + kEndURL) );
     searchShows.clear();
+
+    setState(() {
+      isLoading = false;
+    });
 
     String jsonResponse;
 
@@ -58,8 +67,6 @@ class _PageState extends State<Page> {
       print("search sucess");
 
       var data = jsonDecode(jsonResponse)['data'];
-
-      // print(data);
 
       for(var i in data){
         print(i['title']);
@@ -111,25 +118,29 @@ class _PageState extends State<Page> {
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: InkWell(
-                      onTap: (){
+                  child: InkWell(
+                    onTap: (){
                         search(widget.name.text);
-                      },
-                      child: const Icon(Icons.search, color: Colors.white,)
+                    },
+                    child: Container(
+                      height: 56,
+                      width: 56,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Icon(Icons.search, color: Colors.white,),
                     ),
                   ),
                 )
               ],
             ),
           ),
+
+          isLoading ? 
+          const SpinKitWave(color: Colors.redAccent,)
+          : 
 
           Expanded(
             child: ListView.builder(

@@ -63,7 +63,7 @@ class _SearchShowTileState extends State<SearchShowTile> {
                         const SizedBox(height: 5,),
               
                         Text(
-                          "Episodes : ${widget.show.epsTotal}",
+                          "Episodes : ${widget.show.epsTotal == 0 ? "N/A" : widget.show.epsTotal}",
                           style: const TextStyle(
                             fontSize: 14,
                           ),
