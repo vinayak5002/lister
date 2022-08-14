@@ -53,7 +53,7 @@ class _PageState extends State<Page> {
       isLoading = true;
     });
 
-    API.Response response = await API.get( Uri.parse(kBaseURL + query + kEndURL) );
+    API.Response response = await API.get( Uri.parse(kSearchBaseURL + query + kSearchEndURL) );
     searchShows.clear();
 
     setState(() {
@@ -72,6 +72,7 @@ class _PageState extends State<Page> {
         print(i['title']);
 
         searchShows.add(Show(
+          malId: i['mal_id'],
           title: i['title'],
           epsCompleted: 0,
           epsTotal: i['episodes'] ?? 0,

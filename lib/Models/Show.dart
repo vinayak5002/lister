@@ -6,6 +6,7 @@ import './StatusEnum.dart';
 const String defaultImage = "Hello";
 
 class Show{
+  int malId;
   int epsCompleted;
   String title;
   int epsTotal;
@@ -13,6 +14,7 @@ class Show{
   String imageURL;
 
   Show({
+    required this.malId,
     required this.title,
     required this.epsCompleted,
     required this.epsTotal,
