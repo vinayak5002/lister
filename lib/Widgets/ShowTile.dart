@@ -59,20 +59,89 @@ class _ShowTileState extends State<ShowTile> {
           modalButtons = [];
       }
 
-      return ListView.builder(
-        itemCount: modalButtons.length,
-        itemBuilder: (context, index) {
-          return TextButton(
-            child: Text("Change to ${displayStatus(modalButtons[index])[0]}"),
-            onPressed: () {
-              setState(() {
-                setStatus(widget.show, modalButtons[index]);
-              });
-              Navigator.of(context).pop();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+            child: Text(
+              widget.show.title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: modalButtons.length,
+              itemBuilder: (context, index) {
+                return TextButton(
+                  child: Text("Change to ${displayStatus(modalButtons[index])[0]}"),
+                  onPressed: () {
+                    setState(() {
+                      setStatus(widget.show, modalButtons[index]);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+          ),
+
+          Expanded(
+            child:Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove, color: Colors.red,),
+                  onPressed: (){},
+                ),
+                Expanded(
+                  child: StepProgressIndicator(
+                    totalSteps: widget.show.epsTotal,
+                    currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
+                    size: 8,
+                    padding: 0,
+                    selectedColor: Colors.yellow,
+                    unselectedColor: Colors.cyan,
+                    roundedEdges: const Radius.circular(10),
+                    selectedGradientColor: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.blue, Colors.green],
+                    ),
+                    unselectedGradientColor: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.grey, Colors.grey],
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add, color: Colors.red,),
+                  onPressed: (){},
+                ),
+              ],
+            )
+          ),
+
+          TextButton(
+            child: const Text(
+              "Delete show",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 15
+              ),
+            ),
+            onPressed: (){
+              
             },
-          );
-        },
-        );
+          ),
+          SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
+        ],
+      );
     }
 
     return Container(

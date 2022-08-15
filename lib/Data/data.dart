@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 var allShows = [
   Show(malId: 20, title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed, imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg"),
   Show(malId: 50380, title: "Paripi Koumei", epsCompleted: 8, epsTotal: 12, status: ShowStatus.watching, imageURL: "https://cdn.myanimelist.net/images/anime/1970/122297l.jpg"),
-  Show(malId: 44511, title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned, imageURL: "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"),
+  // Show(malId: 44511, title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned, imageURL: "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"),
 ];
 
 List<Show> watchingShows = [];
@@ -65,11 +65,15 @@ int getCount(int index){
 void increaseEps(Show show){
   for(Show sh in allShows){
     if(sh == show){
-      if(show.status == ShowStatus.planned){
+      if(show.status == ShowStatus.onHold){
         sh.status = ShowStatus.watching;
       }
 
-      if(show.status == ShowStatus.onHold){
+      if(show.status == ShowStatus.planned){
+        break;
+      }
+
+      if(show.status == ShowStatus.dropped){
         sh.status = ShowStatus.watching;
       }
 
