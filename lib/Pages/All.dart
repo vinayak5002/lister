@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lister/Widgets/ShowTile.dart';
+import 'package:provider/provider.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -16,16 +17,16 @@ class _AllState extends State<All> {
   Widget build(BuildContext context) {
 
     List<Show> shows;
-    if(allShows.isEmpty){
+    if(Provider.of<Data>(context).allShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = allShows;
+      shows = Provider.of<Data>(context).allShows;
     }
     @override
     void initState() {
       super.initState();
-      distribute();
-      shows = allShows;
+      Provider.of<Data>(context).distribute();
+      shows = Provider.of<Data>(context).allShows;
     }
 
     if(shows.isEmpty){

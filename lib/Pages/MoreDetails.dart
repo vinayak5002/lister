@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as API ;
 import 'package:lister/Data/data.dart';
+import 'package:provider/provider.dart';
 
 
 import '../Data/constanst.dart';
@@ -34,7 +35,6 @@ class _MoreDetailsState extends State<MoreDetails> {
     print("getDetails called");
     setState(() {
       isLoading = true;
-
     });
 
     API.Response response = await API.get( Uri.parse(kMoreDetailsURL + widget.show.malId.toString()) );
@@ -126,7 +126,7 @@ class _MoreDetailsState extends State<MoreDetails> {
 
         floatingActionButton: FloatingActionButton(
           onPressed: (){
-            addShow(widget.show);
+            Provider.of<Data>(context, listen: false).addShow(widget.show);
             Navigator.pop(context);
           },
           backgroundColor: Colors.redAccent,

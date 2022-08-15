@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -18,15 +19,15 @@ class _PlannedState extends State<Planned> {
 
 
     var shows;
-    if(plannedShows.length ==0){
+    if(Provider.of<Data>(context).plannedShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = plannedShows;
+      shows = Provider.of<Data>(context).plannedShows;
     }
 
     initState() {
       super.initState();
-      shows = plannedShows;
+      shows = Provider.of<Data>(context).plannedShows;
     }
 
     if(shows.isEmpty){

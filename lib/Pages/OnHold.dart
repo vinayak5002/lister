@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -17,17 +18,17 @@ class _OnHoldState extends State<OnHold> {
   Widget build(BuildContext context) {
 
     var shows;
-    if(onHoldShows.isEmpty){
+    if(Provider.of<Data>(context).onHoldShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = onHoldShows;
+      shows = Provider.of<Data>(context).onHoldShows;
     }
 
     @override
     void initState() {
       super.initState();
-      distribute();
-      shows = onHoldShows;
+      Provider.of<Data>(context).distribute();
+      shows = Provider.of<Data>(context).onHoldShows;
     }
 
     if(shows.isEmpty){
