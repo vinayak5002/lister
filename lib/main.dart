@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
+import 'package:provider/provider.dart';
 
 import 'Pages/AddPage.dart';
 import 'Pages/Completed.dart';
@@ -9,6 +10,7 @@ import 'Pages/Dropped.dart';
 import 'Pages/OnHold.dart';
 import 'Pages/Planned.dart';
 import 'Pages/Watching.dart';
+import 'Data/data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,10 +23,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(),
-      home: const MyHomePage(title: 'Lister'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Data(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(),
+        home: const MyHomePage(title: 'Lister'),
+      ),
     );
   }
 }
@@ -51,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   selectDrawerItem(BuildContext context, int i) {
     setState(() {
-      distribute();
+      Provider.of<Data>(context, listen: false).distribute();
       _currentPage = i;
     });
 
@@ -64,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     @override
     void initState() {
       super.initState();
-      distribute();
+      Provider.of<Data>(context).distribute();
     }
 
     return Scaffold(
@@ -83,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(
             padding: const EdgeInsets.all(18),
             child: Text(
-              getCount(_currentPage).toString(),
+              Provider.of<Data>(context).getCount(_currentPage).toString(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.redAccent,

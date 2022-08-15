@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lister/Models/StatusEnum.dart';
+import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../Data/data.dart';
@@ -19,7 +20,7 @@ class _ShowTileState extends State<ShowTile> {
 
   @override
   Widget build(BuildContext context) {
-    late final status = displayStatus(widget.show.status);
+    late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
 
     showModalSheet(){
 
@@ -58,7 +59,6 @@ class _ShowTileState extends State<ShowTile> {
         default:
           modalButtons = [];
       }
-
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -78,10 +78,10 @@ class _ShowTileState extends State<ShowTile> {
               itemCount: modalButtons.length,
               itemBuilder: (context, index) {
                 return TextButton(
-                  child: Text("Change to ${displayStatus(modalButtons[index])[0]}"),
+                  child: Text("Change to ${Provider.of<Data>(context).displayStatus(modalButtons[index])[0]}"),
                   onPressed: () {
                     setState(() {
-                      setStatus(widget.show, modalButtons[index]);
+                      Provider.of<Data>(context).setStatus(widget.show, modalButtons[index]);
                     });
                     Navigator.of(context).pop();
                   },
@@ -136,7 +136,7 @@ class _ShowTileState extends State<ShowTile> {
               ),
             ),
             onPressed: (){
-              
+        
             },
           ),
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
@@ -211,7 +211,7 @@ class _ShowTileState extends State<ShowTile> {
                           children: [
                             Expanded(
                               child: StepProgressIndicator(
-                                totalSteps: widget.show.epsTotal,
+                                totalSteps: widget.show.epsTotal == 0 ? 1: widget.show.epsTotal,
                                 currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
                                 size: 8,
                                 padding: 0,
@@ -238,17 +238,17 @@ class _ShowTileState extends State<ShowTile> {
                                   if(widget.show.status == ShowStatus.planned){
                                     setState(() {
                                       widget.show.status = ShowStatus.watching;
-                                      setStatus(widget.show, ShowStatus.watching);
+                                      Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
                                     });
                                   }
                                   if(widget.show.status == ShowStatus.dropped){
                                     setState(() {
                                       widget.show.status = ShowStatus.watching;
-                                      setStatus(widget.show, ShowStatus.watching);
+                                      Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
                                     });
                                   }
                                   if(widget.show.epsCompleted < widget.show.epsTotal) {
-                                    increaseEps(widget.show);
+                                    Provider.of<Data>(context, listen: false).increaseEps(widget.show);
                                     setState(() {}); 
                                   }
               

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
+import 'package:provider/provider.dart';
 
 import '../Models/Show.dart';
 import '../Widgets/ShowTile.dart';
@@ -17,16 +18,16 @@ class _DroppedState extends State<Dropped> {
 
     List<Show> shows;
 
-    if(droppedShows.isEmpty){
+    if(Provider.of<Data>(context).droppedShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = droppedShows;
+      shows = Provider.of<Data>(context).droppedShows;
     }
 
     initState() {
       super.initState();
-      distribute();
-      shows = droppedShows;
+      Provider.of<Data>(context).distribute();
+      shows = Provider.of<Data>(context).droppedShows;
     }
 
     if(shows.isEmpty){

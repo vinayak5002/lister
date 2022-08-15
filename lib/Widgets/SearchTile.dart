@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lister/Models/StatusEnum.dart';
+import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../Data/data.dart';
@@ -20,7 +21,7 @@ class _SearchShowTileState extends State<SearchShowTile> {
 
   @override
   Widget build(BuildContext context) {
-    late final status = displayStatus(widget.show.status);
+    late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
 
     
     return InkWell(
@@ -71,7 +72,7 @@ class _SearchShowTileState extends State<SearchShowTile> {
                           const SizedBox(height: 5,),
                 
                           Text(
-                            "Episodes : ${widget.show.epsTotal == 0 ? "N/A" : widget.show.epsTotal}",
+                            "Episodes : ${widget.show.epsTotal == 0  ? "N/A" : widget.show.epsTotal}",
                             style: const TextStyle(
                               fontSize: 14,
                             ),
