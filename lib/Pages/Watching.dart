@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -16,15 +17,15 @@ class _WatchingState extends State<Watching> {
   Widget build(BuildContext context) {
 
     var shows;
-    if(watchingShows.length == 0){
+    if(Provider.of<Data>(context).watchingShows.length == 0){
       shows = <Show>[];
     } else {
-      shows = watchingShows;
+      shows = Provider.of<Data>(context).watchingShows;
     }
     initState(){
       super.initState();
-      distribute();
-      shows = watchingShows;
+      Provider.of<Data>(context).distribute();
+      shows = Provider.of<Data>(context).watchingShows;
     }
 
     return ListView.builder(

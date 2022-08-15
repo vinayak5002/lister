@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -17,17 +18,17 @@ class _CompletedState extends State<Completed> {
   Widget build(BuildContext context) {
 
     var shows;
-    if(completedShows.isEmpty){
+    if(Provider.of<Data>(context).completedShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = completedShows;
+      shows = Provider.of<Data>(context).completedShows;
     }
     
     @override
     void initState() {
       super.initState();
-      distribute();
-      shows = completedShows;
+      Provider.of<Data>(context).distribute();
+      shows = Provider.of<Data>(context).completedShows;
     }
 
     if(shows.isEmpty){
