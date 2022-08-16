@@ -84,6 +84,7 @@ class Data extends ChangeNotifier{
         }
 
         distribute();
+        notifyListeners();
         return;
       }
     }
@@ -95,6 +96,7 @@ class Data extends ChangeNotifier{
         if(show.status != ShowStatus.completed){
           sh.status = status;
           distribute();
+          notifyListeners();
         }
         return;
       }
@@ -131,6 +133,22 @@ class Data extends ChangeNotifier{
       allShows.insert(0, show);
       distribute();
       notifyListeners();
+    }
+  }
+
+  void decreaseEps(Show show) {
+    if(show.epsCompleted > 0){
+      for(Show sh in allShows){
+        if(sh == show){
+          sh.epsCompleted--;
+          if(show.epsCompleted == 0){
+            sh.status = ShowStatus.planned;
+          }
+          distribute();
+          notifyListeners();
+          return;
+        }
+      }
     }
   }
 }

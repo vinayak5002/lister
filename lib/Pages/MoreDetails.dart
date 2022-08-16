@@ -12,9 +12,12 @@ import '../Models/Show.dart';
 
 
 class MoreDetails extends StatefulWidget {
-  const MoreDetails({Key? key, required this.show}) : super(key: key);
+  const MoreDetails({Key? key, required this.show, this.fromMain = false, }) : super(key: key);
 
   final Show show;
+  
+  // get fromMain => null;
+  final bool fromMain;
 
   @override
   State<MoreDetails> createState() => _MoreDetailsState();
@@ -123,15 +126,20 @@ class _MoreDetailsState extends State<MoreDetails> {
             ],
           ),
         ),
+        
 
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:
+        !widget.fromMain ?
+         FloatingActionButton(
           onPressed: (){
             Provider.of<Data>(context, listen: false).addShow(widget.show);
             Navigator.pop(context);
           },
           backgroundColor: Colors.redAccent,
           child: const Icon(Icons.add, color: Colors.white,),
-        ),
+        )
+        :
+        null,
       ),
     );
   }

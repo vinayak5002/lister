@@ -6,6 +6,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
+import '../Pages/MoreDetails.dart';
 
 class ShowTile extends StatefulWidget {
   ShowTile({Key? key, required this.show}) : super(key: key);
@@ -18,14 +19,13 @@ class ShowTile extends StatefulWidget {
 
 class _ShowTileState extends State<ShowTile> {
 
-  @override
-  Widget build(BuildContext context) {
-    late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
+  
+  showModalSheet(StateSetter setState){
 
-    showModalSheet(){
+    List<ShowStatus> modalButtons;
+    bool showProgress;
 
-      List<ShowStatus> modalButtons;
-
+    if(widget.show.airStatus != AirStatus.shedueled && widget.show.status != ShowStatus.completed){
       switch (widget.show.status) {
         case ShowStatus.watching:
           modalButtons = [
@@ -59,91 +59,118 @@ class _ShowTileState extends State<ShowTile> {
         default:
           modalButtons = [];
       }
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-            child: Text(
-              widget.show.title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: ListView.builder(
-              itemCount: modalButtons.length,
-              itemBuilder: (context, index) {
-                return TextButton(
-                  child: Text("Change to ${Provider.of<Data>(context).displayStatus(modalButtons[index])[0]}"),
-                  onPressed: () {
-                    setState(() {
-                      Provider.of<Data>(context).setStatus(widget.show, modalButtons[index]);
-                    });
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
-            ),
-          ),
-
-          Expanded(
-            child:Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove, color: Colors.red,),
-                  onPressed: (){},
-                ),
-                Expanded(
-                  child: StepProgressIndicator(
-                    totalSteps: widget.show.epsTotal,
-                    currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
-                    size: 8,
-                    padding: 0,
-                    selectedColor: Colors.yellow,
-                    unselectedColor: Colors.cyan,
-                    roundedEdges: const Radius.circular(10),
-                    selectedGradientColor: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.blue, Colors.green],
-                    ),
-                    unselectedGradientColor: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.grey, Colors.grey],
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, color: Colors.red,),
-                  onPressed: (){},
-                ),
-              ],
-            )
-          ),
-
-          TextButton(
-            child: const Text(
-              "Delete show",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 15
-              ),
-            ),
-            onPressed: (){
-        
-            },
-          ),
-          SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
-        ],
-      );
+      showProgress = true;
+    }
+    else{
+      modalButtons = [];
+      showProgress = false;
     }
 
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+          child: Text(
+            widget.show.title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: ListView.builder(
+            itemCount: modalButtons.length,
+            itemBuilder: (context, index) {
+              return TextButton(
+                child: Text("Change to ${Provider.of<Data>(context).displayStatus(modalButtons[index])[0]}"),
+                onPressed: () {
+                  setState(() {
+                    Provider.of<Data>(context, listen: false).setStatus(widget.show, modalButtons[index]);
+                  });
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("${widget.show.epsCompleted.toString()} / ${widget.show.epsTotal.toString()}", style: const TextStyle(fontSize: 20),),
+          ],
+        ),
+
+        showProgress ?
+        Expanded(
+          child:Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove, color: Colors.red,),
+                onPressed: (){
+                  setState(() {
+                    Provider.of<Data>(context, listen: false).decreaseEps(widget.show);
+                  });
+                },
+              ),
+              Expanded(
+                child: StepProgressIndicator(
+                  totalSteps: widget.show.epsTotal,
+                  currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
+                  size: 8,
+                  padding: 0,
+                  selectedColor: Colors.yellow,
+                  unselectedColor: Colors.cyan,
+                  roundedEdges: const Radius.circular(10),
+                  selectedGradientColor: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.blue, Colors.green],
+                  ),
+                  unselectedGradientColor: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.grey, Colors.grey],
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.red,),
+                onPressed: (){
+                  setState(() {
+                    Provider.of<Data>(context, listen: false).increaseEps(widget.show);
+                  });
+                },
+              ),
+            ],
+          )
+        ) : Container(),
+
+        TextButton(
+          child: const Text(
+            "Delete show",
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 15
+            ),
+          ),
+          onPressed: (){
+      
+          },
+        ),
+        SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
+      ],
+    );
+  
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
 
@@ -155,7 +182,15 @@ class _ShowTileState extends State<ShowTile> {
 
           child: Row(
             children: [
-              Image.network(widget.show.imageURL, height: 100, width: 100,),
+              InkWell(
+                child: Image.network(widget.show.imageURL, height: 100, width: 100,),
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: ((context) => MoreDetails(show: widget.show, fromMain: true,))),
+                  );
+                },
+              ),
 
               Expanded(
                 child: SizedBox(
@@ -184,7 +219,12 @@ class _ShowTileState extends State<ShowTile> {
               
                               onTap: (){
                                 showModalBottomSheet(context: context, builder: (context){
-                                  return showModalSheet();
+                                  // return showModalSheet();
+                                  return StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState){
+                                      return showModalSheet(setState);
+                                    }
+                                  );
                                 });
                               },
                             )
