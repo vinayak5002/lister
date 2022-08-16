@@ -71,6 +71,20 @@ class _PageState extends State<Page> {
       for(var i in data){
         print(i['title']);
 
+        AirStatus thisAirStatus;
+
+        if(i['airing'] == false){
+          if(i['episodes'] == null){
+            thisAirStatus = AirStatus.shedueled;
+          }
+          else{
+            thisAirStatus = AirStatus.finished;
+          }
+        }
+        else{
+          thisAirStatus = AirStatus.airing;
+        }
+
         searchShows.add(Show(
           malId: i['mal_id'],
           title: i['title'],
@@ -78,6 +92,7 @@ class _PageState extends State<Page> {
           epsTotal: i['episodes'] ?? 0,
           status: ShowStatus.planned,
           imageURL: i['images']['jpg']['large_image_url'],
+          airStatus: thisAirStatus
         ));
         setState(() {});
       }

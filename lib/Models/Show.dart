@@ -12,6 +12,7 @@ class Show{
   int epsTotal;
   ShowStatus status;
   String imageURL;
+  AirStatus airStatus;
 
   Show({
     required this.malId,
@@ -20,6 +21,7 @@ class Show{
     required this.epsTotal,
     this.status = ShowStatus.planned,
     required this.imageURL,
+    required this.airStatus
   }){
     if(epsCompleted == epsTotal){
       status = ShowStatus.completed;

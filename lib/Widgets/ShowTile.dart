@@ -168,11 +168,14 @@ class _ShowTileState extends State<ShowTile> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.show.title.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+                            Expanded(
+                              child: Text(
+                                widget.show.title.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                                maxLines: 4,
                               ),
                             ),
               
@@ -190,21 +193,29 @@ class _ShowTileState extends State<ShowTile> {
               
                         const SizedBox(height: 5,),
               
+                        Row(
+                          children: [
+                            status[1],
+                            const SizedBox(width: 5,),
+                            Expanded(child: Text(status[0])),
+                            const SizedBox(width: 20,),
+                            widget.show.airStatus == AirStatus.airing ? 
+                            const Text("Airing")
+                            :
+                            widget.show.airStatus == AirStatus.finished ?
+                            const Text("Finished airing")
+                            :
+                            const Text("Sheduled")
+                          ],
+                        ),
+              
+                        const SizedBox(height: 5,),
+              
                         Text(
                           "${widget.show.epsCompleted}/${widget.show.epsTotal}",
                           style: const TextStyle(
                             fontSize: 14,
                           ),
-                        ),
-              
-                        const SizedBox(height: 5,),
-              
-                        Row(
-                          children: [
-                            status[1],
-                            const SizedBox(width: 5,),
-                            Text(status[0]),
-                          ],
                         ),
               
                         Row(
@@ -235,21 +246,25 @@ class _ShowTileState extends State<ShowTile> {
                               padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
                               child: InkWell(
                                 onTap: () {
-                                  if(widget.show.status == ShowStatus.planned){
-                                    setState(() {
-                                      widget.show.status = ShowStatus.watching;
-                                      Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
-                                    });
-                                  }
-                                  if(widget.show.status == ShowStatus.dropped){
-                                    setState(() {
-                                      widget.show.status = ShowStatus.watching;
-                                      Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
-                                    });
-                                  }
-                                  if(widget.show.epsCompleted < widget.show.epsTotal) {
-                                    Provider.of<Data>(context, listen: false).increaseEps(widget.show);
-                                    setState(() {}); 
+
+                                  if((widget.show.airStatus == AirStatus.finished || widget.show.airStatus == AirStatus.airing) && widget.show.epsCompleted < widget.show.epsTotal){
+
+                                    if(widget.show.status == ShowStatus.planned){
+                                      setState(() {
+                                        widget.show.status = ShowStatus.watching;
+                                        Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
+                                      });
+                                    }
+                                    if(widget.show.status == ShowStatus.dropped){
+                                      setState(() {
+                                        widget.show.status = ShowStatus.watching;
+                                        Provider.of<Data>(context, listen: false).setStatus(widget.show, ShowStatus.watching);
+                                      });
+                                    }
+                                    if(widget.show.epsCompleted < widget.show.epsTotal) {
+                                      Provider.of<Data>(context, listen: false).increaseEps(widget.show);
+                                      setState(() {}); 
+                                    }
                                   }
               
                                 },

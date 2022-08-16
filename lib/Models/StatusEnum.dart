@@ -5,3 +5,9 @@ enum ShowStatus{
   dropped,
   completed
 }
+
+enum AirStatus{
+  shedueled,
+  airing,
+  finished
+}
