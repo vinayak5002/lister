@@ -43,4 +43,26 @@ class Show{
       epsCompleted++;
     }
   }
+
+  static fromMap(Map<String, dynamic> jsonData) {
+    return Show(
+      malId: jsonData['malId'],
+      title: jsonData['title'],
+      epsCompleted: jsonData['epsCompleted'],
+      epsTotal: jsonData['epsTotal'],
+      status: ShowStatus.values[jsonData['status']],
+      imageURL: jsonData['imageURL'] ?? defaultImage,
+      airStatus: AirStatus.values[jsonData['airStatus']]
+    );
+  }
+
+  static Map<String, dynamic> toMap(Show show) => {
+    'malId': show.malId,
+    'title': show.title,
+    'epsCompleted': show.epsCompleted,
+    'epsTotal': show.epsTotal,
+    'status': show.status.index,
+    'imageURL': show.imageURL,
+    'airStatus': show.airStatus.index
+  };
 }

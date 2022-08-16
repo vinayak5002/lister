@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:lister/Models/Show.dart';
 import 'package:lister/Models/StatusEnum.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/Show.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +20,38 @@ class Data extends ChangeNotifier{
   List<Show> plannedShows = [];
   List<Show> droppedShows = [];
   List<Show> completedShows = [];
+
+  Data() {
+    allShows.clear();
+    loadAllShows();
+    distribute();
+  }
+
+  void loadAllShows() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    List<String>? loadedData = pref.getStringList("allShows");
+
+    print("Loaded data: $loadedData");
+
+    if (loadedData != null) {
+      allShows = loadedData.map<Show>((show) => Show.fromMap(jsonDecode(show))).toList();
+    }
+    else {
+      allShows = [];
+    }
+    return;
+  }
+
+  void saveAllShows() async{
+    print("saving all shows");
+    List<String> saveList = allShows.map((e) => jsonEncode(Show.toMap(e))).toList();
+    print(saveList);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("allShows", jsonEncode(saveList));
+  }
 
   void distribute(){
     watchingShows.clear();
@@ -44,6 +79,7 @@ class Data extends ChangeNotifier{
           break;
       }
     }
+    notifyListeners();
   }
 
   int getCount(int index){
@@ -85,6 +121,7 @@ class Data extends ChangeNotifier{
 
         distribute();
         notifyListeners();
+        saveAllShows();
         return;
       }
     }
@@ -97,6 +134,7 @@ class Data extends ChangeNotifier{
           sh.status = status;
           distribute();
           notifyListeners();
+          saveAllShows();
         }
         return;
       }
@@ -133,6 +171,7 @@ class Data extends ChangeNotifier{
       allShows.insert(0, show);
       distribute();
       notifyListeners();
+      saveAllShows();
     }
   }
 
@@ -146,6 +185,7 @@ class Data extends ChangeNotifier{
           }
           distribute();
           notifyListeners();
+          saveAllShows();
           return;
         }
       }
