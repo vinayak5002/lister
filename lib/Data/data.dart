@@ -191,7 +191,15 @@ class Data extends ChangeNotifier{
     }
   }
 
-  void refresh(){
-    notifyListeners();
+  void deleteShow(Show show) {
+    for(Show sh in allShows){
+      if(sh == show){
+        allShows.remove(sh);
+        distribute();
+        notifyListeners();
+        saveAllShows();
+        return;
+      }
+    }
   }
 }

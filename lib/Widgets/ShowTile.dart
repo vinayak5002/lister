@@ -159,7 +159,10 @@ class _ShowTileState extends State<ShowTile> {
             ),
           ),
           onPressed: (){
-      
+            setState(() {
+              Provider.of<Data>(context, listen: false).deleteShow(widget.show);
+            });
+            Navigator.of(context).pop();
           },
         ),
         SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
