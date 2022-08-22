@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,6 @@ class ShowTile extends StatefulWidget {
 
 class _ShowTileState extends State<ShowTile> {
 
-  
   showModalSheet(StateSetter setState){
 
     List<ShowStatus> modalButtons;
@@ -188,9 +189,28 @@ class _ShowTileState extends State<ShowTile> {
     }
   }
 
+  bool _connection = false;
+  Future<void> checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          _connection = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        _connection = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
+
+    checkConnection();
+
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
 
@@ -203,7 +223,9 @@ class _ShowTileState extends State<ShowTile> {
           child: Row(
             children: [
               InkWell(
-                child: Image.network(widget.show.imageURL, height: 100, width: 100,),
+                child: _connection ?
+                Image.network(widget.show.imageURL, height: 100, width: 100,)
+                :Image.asset("assets/images/imageCrack.png", height: 100, width: 100,),
                 onTap: (){
                   Navigator.push(
                     context,
