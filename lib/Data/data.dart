@@ -32,25 +32,24 @@ class Data extends ChangeNotifier{
 
     List<String>? loadedData = pref.getStringList("allShows");
 
-    print("Loaded data: $loadedData");
-
     if (loadedData != null) {
       allShows = loadedData.map<Show>((show) => Show.fromMap(jsonDecode(show))).toList();
     }
     else {
       allShows = [];
     }
+
+    notifyListeners();
+
     return;
   }
 
   void saveAllShows() async{
-    print("saving all shows");
     List<String> saveList = allShows.map((e) => jsonEncode(Show.toMap(e))).toList();
-    print(saveList);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setString("allShows", jsonEncode(saveList));
+    prefs.setStringList("allShows", saveList);
   }
 
   void distribute(){
@@ -190,5 +189,9 @@ class Data extends ChangeNotifier{
         }
       }
     }
+  }
+
+  void refresh(){
+    notifyListeners();
   }
 }

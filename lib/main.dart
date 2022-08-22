@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Models/Show.dart';
 import 'Pages/AddPage.dart';
 import 'Pages/Completed.dart';
 import 'Pages/Dropped.dart';
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Data();
 
     return MultiProvider(
       providers: [
@@ -69,12 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    @override
-    void initState() {
-      super.initState();
-      Provider.of<Data>(context).distribute();
-    }
 
     return Scaffold(
 			appBar: AppBar(
