@@ -17,17 +17,10 @@ class _CompletedState extends State<Completed> {
   @override
   Widget build(BuildContext context) {
 
-    var shows;
+    List<Show> shows;
     if(Provider.of<Data>(context).completedShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = Provider.of<Data>(context).completedShows;
-    }
-    
-    @override
-    void initState() {
-      super.initState();
-      Provider.of<Data>(context).distribute();
       shows = Provider.of<Data>(context).completedShows;
     }
 

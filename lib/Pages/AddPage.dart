@@ -64,12 +64,10 @@ class _PageState extends State<Page> {
 
     if(response.statusCode == 200){
       jsonResponse = response.body;
-      print("search sucess");
 
       var data = jsonDecode(jsonResponse)['data'];
 
       for(var i in data){
-        print(i['title']);
 
         AirStatus thisAirStatus;
 
@@ -99,7 +97,6 @@ class _PageState extends State<Page> {
 
     }
     else{
-      print("search failed");
       searchShows.clear();
     }
 
@@ -112,6 +109,9 @@ class _PageState extends State<Page> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Show'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[850],  
       ),
 
       body: Column(

@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lister/Models/StatusEnum.dart';
-import 'package:provider/provider.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-import '../Data/data.dart';
 import '../Models/Show.dart';
 import '../Pages/MoreDetails.dart';
 
 class SearchShowTile extends StatefulWidget {
-  SearchShowTile({Key? key, required this.show}) : super(key: key);
+  const SearchShowTile({Key? key, required this.show}) : super(key: key);
 
   final Show show;
 
@@ -21,9 +16,6 @@ class _SearchShowTileState extends State<SearchShowTile> {
 
   @override
   Widget build(BuildContext context) {
-    late final status = Provider.of<Data>(context).displayStatus(widget.show.status);
-
-    
     return InkWell(
       onTap:() {
         Navigator.push(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -9,7 +8,7 @@ import '../Models/Show.dart';
 import '../Pages/MoreDetails.dart';
 
 class ShowTile extends StatefulWidget {
-  ShowTile({Key? key, required this.show}) : super(key: key);
+  const ShowTile({Key? key, required this.show}) : super(key: key);
 
   final Show show;
 
@@ -119,7 +118,7 @@ class _ShowTileState extends State<ShowTile> {
               ),
               Expanded(
                 child: StepProgressIndicator(
-                  totalSteps: widget.show.epsTotal,
+                  totalSteps: widget.show.epsTotal == 0 ? 1: widget.show.epsTotal,
                   currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
                   size: 8,
                   padding: 0,
@@ -169,6 +168,24 @@ class _ShowTileState extends State<ShowTile> {
       ],
     );
   
+  }
+
+  String getTextStatus(){
+    if(widget.show.airStatus != AirStatus.airing && widget.show.epsTotal == 1){
+      return "Movie";
+    }
+    else{
+
+      if(widget.show.airStatus == AirStatus.airing){
+        return "Airing";
+      }
+      else if(widget.show.airStatus == AirStatus.finished){
+        return "Finished Airing";
+      }
+      else{
+        return "Sheduled";
+      }
+    }
   }
 
   @override
@@ -235,20 +252,13 @@ class _ShowTileState extends State<ShowTile> {
                         ),
               
                         const SizedBox(height: 5,),
-              
+
                         Row(
                           children: [
                             status[1],
                             const SizedBox(width: 5,),
                             Expanded(child: Text(status[0])),
-                            const SizedBox(width: 20,),
-                            widget.show.airStatus == AirStatus.airing ? 
-                            const Text("Airing")
-                            :
-                            widget.show.airStatus == AirStatus.finished ?
-                            const Text("Finished airing")
-                            :
-                            const Text("Sheduled")
+                            Text(getTextStatus())
                           ],
                         ),
               

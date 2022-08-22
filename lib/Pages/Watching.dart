@@ -6,7 +6,7 @@ import '../Models/Show.dart';
 import '../Widgets/ShowTile.dart';
 
 class Watching extends StatefulWidget {
-  Watching({Key? key}) : super(key: key);
+  const Watching({Key? key}) : super(key: key);
 
   @override
   State<Watching> createState() => _WatchingState();
@@ -16,15 +16,10 @@ class _WatchingState extends State<Watching> {
   @override
   Widget build(BuildContext context) {
 
-    var shows;
-    if(Provider.of<Data>(context).watchingShows.length == 0){
+    List<Show> shows;
+    if(Provider.of<Data>(context).watchingShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = Provider.of<Data>(context).watchingShows;
-    }
-    initState(){
-      super.initState();
-      Provider.of<Data>(context).distribute();
       shows = Provider.of<Data>(context).watchingShows;
     }
 
