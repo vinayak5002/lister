@@ -36,6 +36,7 @@ Maintains record of the anime shows you watch
  - [flutter_spinkit](https://pub.dev/packages/flutter_spinkit): ^5.1.0
  - [provider](https://pub.dev/packages/provider): ^6.0.3
  - [shared_preferences](https://pub.dev/packages/shared_preferences): ^2.0.15
+ - [syncfusion_flutter_sliders](https://pub.dev/packages/syncfusion_flutter_sliders): ^20.2.45
 
 ## Preview
 ### Screenshots
