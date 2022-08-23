@@ -186,7 +186,7 @@ class Data extends ChangeNotifier{
           sh.status = ShowStatus.watching;
         }
 
-        sh.epsCompleted++;
+        sh.epsCompleted = newValue;
 
         if(show.epsTotal == show.epsCompleted){
           if(show.airStatus != AirStatus.airing){
@@ -194,7 +194,6 @@ class Data extends ChangeNotifier{
           }
         }
 
-        sh.epsCompleted = newValue;
         distribute();
         notifyListeners();
         saveAllShows();
