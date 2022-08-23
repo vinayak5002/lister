@@ -86,7 +86,7 @@ class _ShowTileState extends State<ShowTile> {
             itemCount: modalButtons.length,
             itemBuilder: (context, index) {
               return TextButton(
-                child: Text("Change to ${Provider.of<Data>(context).displayStatus(modalButtons[index])[0]}"),
+                child: Text("Change to ${Provider.of<Data>(context).displayStatus(modalButtons[index])[0]}", style: const TextStyle(color: Colors.redAccent),),
                 onPressed: () {
                   setState(() {
                     Provider.of<Data>(context, listen: false).setStatus(widget.show, modalButtons[index]);
@@ -114,10 +114,11 @@ class _ShowTileState extends State<ShowTile> {
             showTicks: true,
             showLabels: true,
             enableTooltip: true,
+            activeColor: Colors.red,
+            inactiveColor: Colors.red[300],
             onChanged: (dynamic newValue) {
               setState((){
                 Provider.of<Data>(context, listen: false).updateEps(widget.show, newValue.toInt());
-                // widget.show.epsCompleted = newValue.toInt();
               });
             },
           )
@@ -128,7 +129,7 @@ class _ShowTileState extends State<ShowTile> {
             "Delete show",
             style: TextStyle(
               color: Colors.red,
-              fontSize: 15
+              fontSize: 20
             ),
           ),
           onPressed: (){
