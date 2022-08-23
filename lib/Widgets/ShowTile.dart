@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../Data/data.dart';
 import '../Models/Show.dart';
@@ -106,47 +107,19 @@ class _ShowTileState extends State<ShowTile> {
 
         showProgress ?
         Expanded(
-          child:Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove, color: Colors.red,),
-                onPressed: (){
-                  setState(() {
-                    Provider.of<Data>(context, listen: false).decreaseEps(widget.show);
-                  });
-                },
-              ),
-              Expanded(
-                child: StepProgressIndicator(
-                  totalSteps: widget.show.epsTotal == 0 ? 1: widget.show.epsTotal,
-                  currentStep: widget.show.epsCompleted > widget.show.epsTotal ? widget.show.epsTotal : widget.show.epsCompleted,
-                  size: 8,
-                  padding: 0,
-                  selectedColor: Colors.yellow,
-                  unselectedColor: Colors.cyan,
-                  roundedEdges: const Radius.circular(10),
-                  selectedGradientColor: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.blue, Colors.green],
-                  ),
-                  unselectedGradientColor: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.grey, Colors.grey],
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add, color: Colors.red,),
-                onPressed: (){
-                  setState(() {
-                    Provider.of<Data>(context, listen: false).increaseEps(widget.show);
-                  });
-                },
-              ),
-            ],
+          child: SfSlider(
+            min: 0,
+            max: widget.show.epsTotal.toDouble(),
+            value: widget.show.epsCompleted.toDouble(),
+            showTicks: true,
+            showLabels: true,
+            enableTooltip: true,
+            onChanged: (dynamic newValue) {
+              setState((){
+                Provider.of<Data>(context, listen: false).updateEps(widget.show, newValue.toInt());
+                // widget.show.epsCompleted = newValue.toInt();
+              });
+            },
           )
         ) : Container(),
 

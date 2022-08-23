@@ -174,19 +174,31 @@ class Data extends ChangeNotifier{
     }
   }
 
-  void decreaseEps(Show show) {
-    if(show.epsCompleted > 0){
-      for(Show sh in allShows){
-        if(sh == show){
-          sh.epsCompleted--;
-          if(show.epsCompleted == 0){
-            sh.status = ShowStatus.planned;
-          }
-          distribute();
-          notifyListeners();
-          saveAllShows();
-          return;
+  void updateEps(Show show, int newValue){
+    for(Show sh in allShows){
+      if(sh == show){
+
+        if(show.status == ShowStatus.planned){
+          sh.status = ShowStatus.watching;
         }
+
+        if(show.status == ShowStatus.onHold){
+          sh.status = ShowStatus.watching;
+        }
+
+        sh.epsCompleted++;
+
+        if(show.epsTotal == show.epsCompleted){
+          if(show.airStatus != AirStatus.airing){
+            sh.status = ShowStatus.completed;
+          }
+        }
+
+        sh.epsCompleted = newValue;
+        distribute();
+        notifyListeners();
+        saveAllShows();
+        return;
       }
     }
   }
