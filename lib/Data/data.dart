@@ -24,7 +24,6 @@ class Data extends ChangeNotifier{
   Data() {
     allShows.clear();
     loadAllShows();
-    distribute();
   }
 
   void loadAllShows() async {
@@ -39,9 +38,9 @@ class Data extends ChangeNotifier{
       allShows = [];
     }
 
-    notifyListeners();
+    distribute();
 
-    return;
+    notifyListeners();
   }
 
   void saveAllShows() async{
