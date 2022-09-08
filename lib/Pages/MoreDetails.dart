@@ -35,7 +35,6 @@ class _MoreDetailsState extends State<MoreDetails> {
   late int eps;
 
   getDetails()async{
-    print("getDetails called");
     setState(() {
       isLoading = true;
     });
@@ -44,15 +43,99 @@ class _MoreDetailsState extends State<MoreDetails> {
 
     setState(() {
       isLoading = false;
-      print("Loaded");
     });
 
     setState(() {
       data = jsonDecode(response.body);
       data = data['data'];
       eps = data['episodes'];
-      print(eps);
     });
+  }
+
+  List<Widget> getBody(){
+    if(data['type'] != 'Movie'){
+      return [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(60, 0, 60, 20),
+          child: Image.network(widget.show.imageURL),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: Text(
+            textAlign: TextAlign.center,
+            widget.show.title,
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.redAccent),
+            maxLines: 10,
+            overflow: TextOverflow.visible,
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(data['episodes'] != null ? "Episodes: ${data['episodes']}" : "Episodes: N/A",  style: const TextStyle(fontSize: 20),),
+              Text(data['status'].toString(),  style: const TextStyle(fontSize: 20),),
+            ],
+          ),
+        ), 
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+          child: Text("${data['season']} ${data['year']}",  style: const TextStyle(fontSize: 20),),
+        ),
+
+        data['airing'] == false ?
+        Text("Aired from ${data['aired']['string']}", style: const TextStyle(fontSize: 20),) :
+        Text("Airing on ${data['broadcast']['string']}", style: const TextStyle(fontSize: 20),),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+          child: Text("${data['synopsis']}", style: const TextStyle(fontSize: 15),),
+        ),       
+      ];
+    }
+    else{
+      return [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(60, 0, 60, 20),
+          child: Image.network(widget.show.imageURL),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: Text(
+            textAlign: TextAlign.center,
+            widget.show.title,
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.redAccent),
+            maxLines: 10,
+            overflow: TextOverflow.visible,
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Text("Movie",  style: TextStyle(fontSize: 20),),
+              Text(data['duration'].toString(),  style: const TextStyle(fontSize: 20),),
+            ],
+          ),
+        ), 
+
+        const SizedBox(height: 10),
+
+        Text("Released ${data['aired']['string']}", style: const TextStyle(fontSize: 20)),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+          child: Text("${data['synopsis']}", style: const TextStyle(fontSize: 15),),
+        ),       
+      ];
+    }
   }
 
   @override
@@ -65,7 +148,7 @@ class _MoreDetailsState extends State<MoreDetails> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.redAccent),
+            icon: const Icon(Icons.arrow_back, color: Colors.redAccent),
             onPressed: (){
               Navigator.pop(context);
             },
@@ -82,48 +165,7 @@ class _MoreDetailsState extends State<MoreDetails> {
         
         SingleChildScrollView(
           child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(60, 0, 60, 20),
-                child: Image.network(widget.show.imageURL),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: Text(
-                  textAlign: TextAlign.center,
-                  widget.show.title,
-                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.redAccent),
-                  maxLines: 10,
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(data['episodes'] != null ? "Episodes: ${data['episodes']}" : "Episodes: N/A",  style: const TextStyle(fontSize: 20),),
-                    Text(data['status'].toString(),  style: const TextStyle(fontSize: 20),),
-                  ],
-                ),
-              ), 
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Text("${data['season']} ${data['year']}",  style: const TextStyle(fontSize: 20),),
-              ),
-
-              data['airing'] == false ?
-              Text("Aired from ${data['aired']['string']}", style: const TextStyle(fontSize: 20),) :
-              Text("Airing on ${data['broadcast']['string']}", style: const TextStyle(fontSize: 20),),
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                child: Text("${data['synopsis']}", style: const TextStyle(fontSize: 15),),
-              ),       
-            ],
+            children: getBody(),
           ),
         ),
         

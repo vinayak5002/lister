@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 import './StatusEnum.dart';
-
-const String defaultImage = "Hello";
 
 class Show{
   int malId;
@@ -19,20 +14,10 @@ class Show{
     required this.title,
     required this.epsCompleted,
     required this.epsTotal,
-    this.status = ShowStatus.planned,
+    required this.status,
     required this.imageURL,
     required this.airStatus
-  }){
-    if(epsCompleted == epsTotal){
-      status = ShowStatus.completed;
-    }
-    else if(epsCompleted > 0){
-      status = ShowStatus.watching;
-    }
-    else{
-      status = ShowStatus.planned;
-    }
-  }
+  });
 
   int getEpsCompleted(){
     return epsCompleted;
@@ -51,7 +36,7 @@ class Show{
       epsCompleted: jsonData['epsCompleted'],
       epsTotal: jsonData['epsTotal'],
       status: ShowStatus.values[jsonData['status']],
-      imageURL: jsonData['imageURL'] ?? defaultImage,
+      imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']]
     );
   }

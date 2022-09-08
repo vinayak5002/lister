@@ -18,15 +18,10 @@ class _PlannedState extends State<Planned> {
   Widget build(BuildContext context) {
 
 
-    var shows;
+    List<Show> shows;
     if(Provider.of<Data>(context).plannedShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = Provider.of<Data>(context).plannedShows;
-    }
-
-    initState() {
-      super.initState();
       shows = Provider.of<Data>(context).plannedShows;
     }
 

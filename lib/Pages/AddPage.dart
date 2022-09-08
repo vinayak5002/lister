@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -47,71 +49,91 @@ List<Show> searchShows = [];
 class _PageState extends State<Page> {
 
   bool isLoading = false;
+  bool _connection = false;
 
+  Future<bool> checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          _connection = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        _connection = false;
+      });
+    }
+    return false;
+  }
+  
   search(String query)async{
-    setState(() {
-      isLoading = true;
-    });
+    if(_connection){
+      setState(() {
+        isLoading = true;
+      });
 
-    API.Response response = await API.get( Uri.parse(kSearchBaseURL + query + kSearchEndURL) );
-    searchShows.clear();
+      API.Response response = await API.get( Uri.parse(kSearchBaseURL + query + kSearchEndURL) );
+      searchShows.clear();
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
 
-    String jsonResponse;
+      String jsonResponse;
 
-    if(response.statusCode == 200){
-      jsonResponse = response.body;
-      print("search sucess");
+      if(response.statusCode == 200){
+        jsonResponse = response.body;
 
-      var data = jsonDecode(jsonResponse)['data'];
+        var data = jsonDecode(jsonResponse)['data'];
 
-      for(var i in data){
-        print(i['title']);
+        for(var i in data){
 
-        AirStatus thisAirStatus;
+          AirStatus thisAirStatus;
 
-        if(i['airing'] == false){
-          if(i['episodes'] == null){
-            thisAirStatus = AirStatus.shedueled;
+          if(i['airing'] == false){
+            if(i['episodes'] == null){
+              thisAirStatus = AirStatus.shedueled;
+            }
+            else{
+              thisAirStatus = AirStatus.finished;
+            }
           }
           else{
-            thisAirStatus = AirStatus.finished;
+            thisAirStatus = AirStatus.airing;
           }
-        }
-        else{
-          thisAirStatus = AirStatus.airing;
+
+          searchShows.add(Show(
+            malId: i['mal_id'],
+            title: i['title'],
+            epsCompleted: 0,
+            epsTotal: i['episodes'] ?? 0,
+            status: ShowStatus.planned,
+            imageURL: i['images']['jpg']['large_image_url'],
+            airStatus: thisAirStatus
+          ));
+          setState(() {});
         }
 
-        searchShows.add(Show(
-          malId: i['mal_id'],
-          title: i['title'],
-          epsCompleted: 0,
-          epsTotal: i['episodes'] ?? 0,
-          status: ShowStatus.planned,
-          imageURL: i['images']['jpg']['large_image_url'],
-          airStatus: thisAirStatus
-        ));
-        setState(() {});
+      }
+      else{
+        searchShows.clear();
       }
 
+      setState(() {});
     }
-    else{
-      print("search failed");
-      searchShows.clear();
-    }
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    checkConnection();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Show'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[850],  
       ),
 
       body: Column(
@@ -153,6 +175,9 @@ class _PageState extends State<Page> {
               ],
             ),
           ),
+
+          !_connection ?
+          Image.asset("assets/images/noInternet.png", height: 100,):
 
           isLoading ? 
           const SpinKitWave(color: Colors.redAccent,)

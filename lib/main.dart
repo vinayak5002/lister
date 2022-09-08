@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Models/Show.dart';
 import 'Pages/AddPage.dart';
 import 'Pages/Completed.dart';
 import 'Pages/Dropped.dart';
@@ -55,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var _currentPage = 0;
 
   final List<Widget> _pages = [
-    All(),
-    Watching(),
+    const All(),
+    const Watching(),
     const OnHold(),
     const Planned(),
     const Dropped(),
@@ -129,31 +125,37 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: const Icon(Icons.list),
               title: const Text('All'),
               onTap: () => selectDrawerItem(context, 0),
+              trailing: Text(Provider.of<Data>(context).allShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold),),
             ),
             ListTile(
               leading: const Icon(CupertinoIcons.clock),
               title: const Text('Watching'),
               onTap: () => selectDrawerItem(context, 1),
+              trailing: Text(Provider.of<Data>(context).watchingShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
             ListTile(
               leading: const Icon(Icons.pause),
               title: const Text('On-hold'),
               onTap: () => selectDrawerItem(context, 2),
+              trailing: Text(Provider.of<Data>(context).onHoldShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
             ListTile(
               leading: const Icon(CupertinoIcons.cart),
               title: const Text('Planned'),
               onTap: () => selectDrawerItem(context, 3),
+              trailing: Text(Provider.of<Data>(context).plannedShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
             ListTile(
               leading: const Icon(Icons.cancel),
               title: const Text('Dropped'),
               onTap: () => selectDrawerItem(context, 4),
+              trailing: Text(Provider.of<Data>(context).droppedShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
             ListTile(
               leading: const Icon(Icons.check),
               title: const Text('Completed'),
               onTap: () => selectDrawerItem(context, 5),
+              trailing: Text(Provider.of<Data>(context).completedShows.length.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ],
         ),

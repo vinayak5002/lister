@@ -24,12 +24,6 @@ class _DroppedState extends State<Dropped> {
       shows = Provider.of<Data>(context).droppedShows;
     }
 
-    initState() {
-      super.initState();
-      Provider.of<Data>(context).distribute();
-      shows = Provider.of<Data>(context).droppedShows;
-    }
-
     if(shows.isEmpty){
       return Center(
         child: Column(
@@ -59,7 +53,5 @@ class _DroppedState extends State<Dropped> {
         },
       );
     }
-
-    return Text("Dropped");
   }
 }

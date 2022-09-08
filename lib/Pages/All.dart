@@ -6,7 +6,7 @@ import '../Data/data.dart';
 import '../Models/Show.dart';
 
 class All extends StatefulWidget {
-  All({Key? key}) : super(key: key);
+  const All({Key? key}) : super(key: key);
   
   @override
   State<All> createState() => _AllState();
@@ -20,12 +20,6 @@ class _AllState extends State<All> {
     if(Provider.of<Data>(context).allShows.isEmpty){
       shows = <Show>[];
     } else {
-      shows = Provider.of<Data>(context).allShows;
-    }
-    @override
-    void initState() {
-      super.initState();
-      Provider.of<Data>(context).distribute();
       shows = Provider.of<Data>(context).allShows;
     }
 
@@ -49,10 +43,26 @@ class _AllState extends State<All> {
       );
     }
     else{
-      return ListView.builder(
+      return ReorderableListView.builder(
+
+        onReorder: (int oldIndex, int newIndex) { 
+
+          if(newIndex > oldIndex) newIndex--;
+
+          setState(() {
+            var show = shows.removeAt(oldIndex);
+            shows.insert(newIndex, show);
+          });
+
+          Provider.of<Data>(context, listen: false).allShows = shows;
+          Provider.of<Data>(context, listen: false).distribute();
+          Provider.of<Data>(context, listen: false).saveAllShows();
+        },
+
         itemCount: shows.length,
         itemBuilder: (context, index) {
           return ShowTile(
+            key: ValueKey(index),
             show: shows[index],
           );
         },
