@@ -49,26 +49,19 @@ class Data extends ChangeNotifier{
 
   void updateAiringShows() async{
 
-    print("called func");
-
     for(Show show in allShows){
       if(show.airStatus != AirStatus.finished ){
 
         API.Response searchRes = await API.get(
-          Uri.parse("${kSearch2BaseURL}Lycoris%20recoil")
+          Uri.parse(kSearch2BaseURL + show.title)
         );
 
         String jsonResponse;
-
-        print(searchRes.body);
         
         if(searchRes.statusCode == 200){
           jsonResponse = searchRes.body;
 
           var data = jsonDecode(jsonResponse);
-
-          print("Search results: "); 
-          print(data);
 
           String detailID = data[0]['animeId'];
 
@@ -91,6 +84,8 @@ class Data extends ChangeNotifier{
     distribute();
 
     notifyListeners();
+
+    saveAllShows();
   }
 
   void saveAllShows() async{
