@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/Show.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as API ;
+import 'package:lister/Data/constanst.dart';
 
 class Data extends ChangeNotifier{
 
@@ -36,6 +38,54 @@ class Data extends ChangeNotifier{
     }
     else {
       allShows = [];
+    }
+
+    distribute();
+
+    notifyListeners();
+
+    updateAiringShows();
+  }
+
+  void updateAiringShows() async{
+
+    print("called func");
+
+    for(Show show in allShows){
+      if(show.airStatus != AirStatus.finished ){
+
+        API.Response searchRes = await API.get(
+          Uri.parse("${kSearch2BaseURL}Lycoris%20recoil")
+        );
+
+        String jsonResponse;
+
+        print(searchRes.body);
+        
+        if(searchRes.statusCode == 200){
+          jsonResponse = searchRes.body;
+
+          var data = jsonDecode(jsonResponse);
+
+          print("Search results: "); 
+          print(data);
+
+          String detailID = data[0]['animeId'];
+
+          API.Response detailsRes = await API.get(
+            Uri.parse(kAirDetailsBaseURL + detailID)
+          );
+
+          jsonResponse = detailsRes .body;
+
+          if(detailsRes.statusCode == 200){
+            data = jsonDecode(jsonResponse);
+
+            show.epsTotal = int.parse(data['totalEpisodes']);
+          }
+
+        }
+      }
     }
 
     distribute();
