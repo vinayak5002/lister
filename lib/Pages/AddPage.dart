@@ -92,7 +92,7 @@ class _PageState extends State<Page> {
           AirStatus thisAirStatus;
 
           if(i['airing'] == false){
-            if(i['episodes'] == null){
+            if(i['status'] == "Not yet aired"){
               thisAirStatus = AirStatus.shedueled;
             }
             else{
