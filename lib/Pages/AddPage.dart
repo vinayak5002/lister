@@ -158,7 +158,7 @@ class _PageState extends State<Page> {
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: InkWell(
                     onTap: (){
-                        search(widget.name.text);
+                      search(widget.name.text);
                     },
                     child: Container(
                       height: 56,

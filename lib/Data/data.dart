@@ -24,6 +24,7 @@ class Data extends ChangeNotifier{
   List<Show> completedShows = [];
 
   bool updatingAiringShows = false;
+  int updatingStatus = 0;
 
   Data() {
     allShows.clear();
@@ -51,23 +52,30 @@ class Data extends ChangeNotifier{
 
   void updateAiringShows() async{
     updatingAiringShows = true;
+    updatingStatus = 0;
     notifyListeners();
 
     for(Show show in allShows){
+      updatingStatus++;
+      notifyListeners();
+
       if(show.airStatus != AirStatus.finished ){
 
         API.Response showstatus = await API.get(
-          Uri.parse("https://api.jikan.moe/v4/anime/${show.malId}/full")
+          Uri.parse(kMoreDetailsURL + show.malId.toString())
         );
+
+        print(show.malId);
 
         var jsonResponse = showstatus.body;
 
         if(showstatus.statusCode == 200){
           var data = jsonDecode(jsonResponse);
+          print(data["data"]["airing"]);
 
           if(data["data"]["status"] == "Finished Airing"){
             show.airStatus = AirStatus.finished;
-            if(show.epsCompleted == show.epsCompleted){
+            if(show.epsCompleted == show.epsTotal){
               show.status = ShowStatus.completed;
             }
           }
