@@ -8,6 +8,7 @@ class Show{
   ShowStatus status;
   String imageURL;
   AirStatus airStatus;
+  String gogoName = "";
 
   Show({
     required this.malId,
@@ -16,7 +17,8 @@ class Show{
     required this.epsTotal,
     required this.status,
     required this.imageURL,
-    required this.airStatus
+    required this.airStatus,
+    gogoName = " ",
   });
 
   int getEpsCompleted(){
@@ -37,7 +39,8 @@ class Show{
       epsTotal: jsonData['epsTotal'],
       status: ShowStatus.values[jsonData['status']],
       imageURL: jsonData['imageURL'],
-      airStatus: AirStatus.values[jsonData['airStatus']]
+      airStatus: AirStatus.values[jsonData['airStatus']],
+      gogoName: jsonData['gogoName']
     );
   }
 
@@ -48,6 +51,7 @@ class Show{
     'epsTotal': show.epsTotal,
     'status': show.status.index,
     'imageURL': show.imageURL,
-    'airStatus': show.airStatus.index
+    'airStatus': show.airStatus.index,
+    'gogoName' : show.gogoName
   };
 }

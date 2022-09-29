@@ -23,6 +23,8 @@ class Data extends ChangeNotifier{
   List<Show> droppedShows = [];
   List<Show> completedShows = [];
 
+  bool updatingAiringShows = false;
+
   Data() {
     allShows.clear();
     loadAllShows();
@@ -48,38 +50,46 @@ class Data extends ChangeNotifier{
   }
 
   void updateAiringShows() async{
+    updatingAiringShows = true;
+    notifyListeners();
 
     for(Show show in allShows){
       if(show.airStatus != AirStatus.finished ){
 
-        API.Response searchRes = await API.get(
-          Uri.parse(kSearch2BaseURL + show.title)
+        API.Response showstatus = await API.get(
+          Uri.parse("https://api.jikan.moe/v4/anime/${show.malId}/full")
         );
 
-        String jsonResponse;
-        
-        if(searchRes.statusCode == 200){
-          jsonResponse = searchRes.body;
+        var jsonResponse = showstatus.body;
 
+        if(showstatus.statusCode == 200){
           var data = jsonDecode(jsonResponse);
 
-          String detailID = data[0]['animeId'];
-
-          API.Response detailsRes = await API.get(
-            Uri.parse(kAirDetailsBaseURL + detailID)
-          );
-
-          jsonResponse = detailsRes .body;
-
-          if(detailsRes.statusCode == 200){
-            data = jsonDecode(jsonResponse);
-
-            show.epsTotal = int.parse(data['totalEpisodes']);
+          if(data["data"]["status"] == "Finished Airing"){
+            show.airStatus = AirStatus.finished;
+            if(show.epsCompleted == show.epsCompleted){
+              show.status = ShowStatus.completed;
+            }
           }
+          else{
+            API.Response detailsRes = await API.get(
+              Uri.parse(kAirDetailsBaseURL + show.gogoName)
+            );
 
+            jsonResponse = detailsRes.body;
+
+            if(detailsRes.statusCode == 200){
+              var data = jsonDecode(jsonResponse);
+
+              show.epsTotal = int.parse(data['totalEpisodes']);
+            }
+          }
         }
+
       }
     }
+
+    updatingAiringShows = false;
 
     distribute();
 
@@ -199,7 +209,7 @@ class Data extends ChangeNotifier{
     }
   }
 
-  void addShow(Show show){
+  Future<void> addShow(Show show) async {
     bool exists = false;
 
     for(Show sh in allShows){
@@ -210,6 +220,20 @@ class Data extends ChangeNotifier{
     }
 
     if(!exists){
+      API.Response searchRes = await API.get(
+        Uri.parse(kSearch2BaseURL + show.title)
+      );
+  
+      String jsonResponse;
+
+      if(searchRes.statusCode == 200){
+        jsonResponse = searchRes.body;
+
+        var data = jsonDecode(jsonResponse);
+
+        show.gogoName = data[0]['animeId'];
+      }
+
       show.status = ShowStatus.planned;
       allShows.insert(0, show);
       distribute();
