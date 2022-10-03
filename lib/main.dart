@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Lister',
         theme: ThemeData.dark(),
         home: const MyHomePage(title: 'Lister'),
       ),

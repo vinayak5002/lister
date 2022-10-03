@@ -52,8 +52,8 @@ class _AllState extends State<All> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Updating Shows",
                     style: TextStyle(
                       color: Colors.white,
@@ -61,8 +61,11 @@ class _AllState extends State<All> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SpinKitRing(color: Colors.redAccent, size: 40),
+                    padding: const EdgeInsets.all(8.0),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      child: const SpinKitRing(color: Colors.redAccent, size: 40)
+                    ),
                   )
                 ],
               ),

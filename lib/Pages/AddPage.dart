@@ -110,7 +110,8 @@ class _PageState extends State<Page> {
             epsTotal: i['episodes'] ?? 0,
             status: ShowStatus.planned,
             imageURL: i['images']['jpg']['large_image_url'],
-            airStatus: thisAirStatus
+            airStatus: thisAirStatus,
+            gogoName: ' '
           ));
           setState(() {});
         }

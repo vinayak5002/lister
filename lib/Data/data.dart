@@ -12,8 +12,8 @@ import 'package:lister/Data/constanst.dart';
 class Data extends ChangeNotifier{
 
   var allShows = [
-    Show(malId: 20, title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed, imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg", airStatus: AirStatus.finished),
-    Show(malId: 50380, title: "Paripi Koumei", epsCompleted: 8, epsTotal: 12, status: ShowStatus.watching, imageURL: "https://cdn.myanimelist.net/images/anime/1970/122297l.jpg", airStatus: AirStatus.finished),
+    Show(malId: 20, title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed, imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg", airStatus: AirStatus.finished, gogoName: ''),
+    Show(malId: 50380, title: "Paripi Koumei", epsCompleted: 8, epsTotal: 12, status: ShowStatus.watching, imageURL: "https://cdn.myanimelist.net/images/anime/1970/122297l.jpg", airStatus: AirStatus.finished, gogoName: ''),
     // Show(malId: 44511, title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned, imageURL: "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"),
   ];
 
@@ -59,41 +59,37 @@ class Data extends ChangeNotifier{
       updatingStatus++;
       notifyListeners();
 
+      if(show.gogoName == ""){
+        print('${show.title} -- ${show.gogoName}');
+        continue;
+      }
+
       if(show.airStatus != AirStatus.finished ){
+        print(show.gogoName);
 
         API.Response showstatus = await API.get(
-          Uri.parse(kMoreDetailsURL + show.malId.toString())
+          Uri.parse("https://lister-api1.herokuapp.com/${show.gogoName}")
         );
 
         print(show.malId);
 
         var jsonResponse = showstatus.body;
 
-        if(showstatus.statusCode == 200){
-          var data = jsonDecode(jsonResponse);
-          print(data["data"]["airing"]);
+        var data = jsonDecode(jsonResponse);
 
-          if(data["data"]["status"] == "Finished Airing"){
+        if(data['error'] != true){
+          
+          if(data['status'] == 'Completed'){
             show.airStatus = AirStatus.finished;
             if(show.epsCompleted == show.epsTotal){
               show.status = ShowStatus.completed;
             }
           }
           else{
-            API.Response detailsRes = await API.get(
-              Uri.parse(kAirDetailsBaseURL + show.gogoName)
-            );
-
-            jsonResponse = detailsRes.body;
-
-            if(detailsRes.statusCode == 200){
-              var data = jsonDecode(jsonResponse);
-
-              show.epsTotal = int.parse(data['totalEpisodes']);
-            }
+            show.epsTotal = data['epstotal'];
           }
-        }
 
+        }
       }
     }
 
@@ -240,13 +236,19 @@ class Data extends ChangeNotifier{
         var data = jsonDecode(jsonResponse);
 
         show.gogoName = data[0]['animeId'];
+        saveAllShows();
+
+        print(data[0]['animeId']);
       }
+
+      print("added ${show.title} -- ${show.gogoName}");
 
       show.status = ShowStatus.planned;
       allShows.insert(0, show);
       distribute();
       notifyListeners();
       saveAllShows();
+      updateAiringShows();
     }
   }
 

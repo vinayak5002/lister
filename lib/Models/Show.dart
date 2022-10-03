@@ -8,7 +8,7 @@ class Show{
   ShowStatus status;
   String imageURL;
   AirStatus airStatus;
-  String gogoName = "";
+  String gogoName;
 
   Show({
     required this.malId,
@@ -18,7 +18,7 @@ class Show{
     required this.status,
     required this.imageURL,
     required this.airStatus,
-    gogoName = " ",
+    required this.gogoName,
   });
 
   int getEpsCompleted(){
@@ -32,6 +32,9 @@ class Show{
   }
 
   static fromMap(Map<String, dynamic> jsonData) {
+
+    print("loading ${jsonData['title']} -- ${jsonData['gogoName']}");
+
     return Show(
       malId: jsonData['malId'],
       title: jsonData['title'],
@@ -44,7 +47,9 @@ class Show{
     );
   }
 
-  static Map<String, dynamic> toMap(Show show) => {
+  static Map<String, dynamic> toMap(Show show) {
+    print("Storing ${show.title} -- ${show.gogoName}");
+    return {
     'malId': show.malId,
     'title': show.title,
     'epsCompleted': show.epsCompleted,
@@ -54,4 +59,5 @@ class Show{
     'airStatus': show.airStatus.index,
     'gogoName' : show.gogoName
   };
+  }
 }
