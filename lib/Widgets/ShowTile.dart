@@ -296,6 +296,8 @@ class _ShowTileState extends State<ShowTile> {
                               child: InkWell(
                                 onTap: () {
 
+                                  print("${widget.show.title} - ${widget.show.airStatus}");
+
                                   if((widget.show.airStatus == AirStatus.finished || widget.show.airStatus == AirStatus.airing) && widget.show.epsCompleted < widget.show.epsTotal){
 
                                     if(widget.show.status == ShowStatus.planned){

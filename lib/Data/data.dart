@@ -60,18 +60,14 @@ class Data extends ChangeNotifier{
       notifyListeners();
 
       if(show.gogoName == ""){
-        print('${show.title} -- ${show.gogoName}');
         continue;
       }
 
       if(show.airStatus != AirStatus.finished ){
-        print(show.gogoName);
 
         API.Response showstatus = await API.get(
           Uri.parse("https://lister-api1.herokuapp.com/${show.gogoName}")
         );
-
-        print(show.malId);
 
         var jsonResponse = showstatus.body;
 
@@ -79,16 +75,23 @@ class Data extends ChangeNotifier{
 
         if(data['error'] != true){
           
-          if(data['status'] == 'Completed'){
-            show.airStatus = AirStatus.finished;
-            if(show.epsCompleted == show.epsTotal){
-              show.status = ShowStatus.completed;
-            }
-          }
-          else{
-            show.epsTotal = data['epstotal'];
+          AirStatus newAiringStatus = AirStatus.shedueled;
+          switch(data['status']){
+            case 'Ongoing':
+              newAiringStatus = AirStatus.airing;
+              break;
+            
+            case 'Upcomming':
+              newAiringStatus = AirStatus.shedueled;
+              break;
+            
+            case 'Completed':
+              newAiringStatus = AirStatus.finished;
+              break;
           }
 
+          show.airStatus = newAiringStatus;
+          show.epsTotal = data['epstotal'];
         }
       }
     }
@@ -238,10 +241,7 @@ class Data extends ChangeNotifier{
         show.gogoName = data[0]['animeId'];
         saveAllShows();
 
-        print(data[0]['animeId']);
       }
-
-      print("added ${show.title} -- ${show.gogoName}");
 
       show.status = ShowStatus.planned;
       allShows.insert(0, show);
