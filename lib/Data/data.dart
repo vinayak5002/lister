@@ -66,7 +66,7 @@ class Data extends ChangeNotifier{
       if(show.airStatus != AirStatus.finished ){
 
         API.Response showstatus = await API.get(
-          Uri.parse("https://lister-api1.herokuapp.com/${show.gogoName}")
+          Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
         );
 
         var jsonResponse = showstatus.body;
