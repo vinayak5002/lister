@@ -12,41 +12,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../Models/Show.dart';
 import '../Models/StatusEnum.dart';
 
+
 class AddPage extends StatefulWidget {
-  const AddPage({Key? key}) : super(key: key);
+  const AddPage({Key? key,}) : super(key: key);
 
   @override
   State<AddPage> createState() => _AddPageState();
 }
 
-class _AddPageState extends State<AddPage> {
-  @override
-  Widget build(BuildContext context) {
-
-    TextEditingController name = TextEditingController();
-
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: Page(name: name),
-    );
-  }
-}
-
-class Page extends StatefulWidget {
-  const Page({
-    Key? key,
-    required this.name,
-  }) : super(key: key);
-
-  final TextEditingController name;
-
-  @override
-  State<Page> createState() => _PageState();
-}
-
 List<Show> searchShows = [];
 
-class _PageState extends State<Page> {
+class _AddPageState extends State<AddPage> {
+
+  TextEditingController name = TextEditingController();
 
   bool isLoading = false;
   bool _connection = false;
@@ -111,7 +89,8 @@ class _PageState extends State<Page> {
             status: ShowStatus.planned,
             imageURL: i['images']['jpg']['large_image_url'],
             airStatus: thisAirStatus,
-            gogoName: ' '
+            gogoName: ' ',
+            updating: false
           ));
           setState(() {});
         }
@@ -130,13 +109,6 @@ class _PageState extends State<Page> {
     checkConnection();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Show'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.grey[850],  
-      ),
-
       body: Column(
         children: [
           Padding(
@@ -146,7 +118,7 @@ class _PageState extends State<Page> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: widget.name,
+                    controller: name,
                     decoration: const InputDecoration(
                       fillColor: Colors.red,
                       border: OutlineInputBorder(),
@@ -159,7 +131,7 @@ class _PageState extends State<Page> {
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: InkWell(
                     onTap: (){
-                      search(widget.name.text);
+                      search(name.text);
                     },
                     child: Container(
                       height: 56,
@@ -193,7 +165,8 @@ class _PageState extends State<Page> {
             ),
           )
         ],
-      )
+      ),
+
     );
   }
 }

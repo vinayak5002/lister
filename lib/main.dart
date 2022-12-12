@@ -49,6 +49,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _currentPage = 0;
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int newIndex){
+    setState(() {
+      _selectedIndex = newIndex;
+    });
+
+    if(newIndex == 1){
+      setState(() {
+        bodyContent = const AddPage();
+      });
+    }
+    if(newIndex == 0){
+      bodyContent = Center(
+        child: _pages[_currentPage],
+      );
+    }
+  } 
 
   final List<Widget> _pages = [
     const All(),
@@ -59,13 +77,25 @@ class _MyHomePageState extends State<MyHomePage> {
     const Completed()
   ];
 
+  var bodyContent;
+
   selectDrawerItem(BuildContext context, int i) {
     setState(() {
       Provider.of<Data>(context, listen: false).distribute();
-      _currentPage = i;
+      bodyContent = Center(
+        child: _pages[i],
+      );
     });
 
     Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    bodyContent = Center(
+      child: _pages[_currentPage],
+    );
   }
 
   @override
@@ -83,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
           
         ),
 
-        actions: [
+        actions: _selectedIndex == 0 ?
+        [
           Padding(
             padding: const EdgeInsets.all(18),
             child: Text(
@@ -95,13 +126,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-        ],
+        ] : [],
 
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.grey[850],
 
-        leading: Builder(
+        leading: _selectedIndex == 0 ?
+        Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(
@@ -114,12 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             );
           },
-        ),
+        ) : Container(),
       ),
 
-      drawer: Drawer(
+      drawer: _selectedIndex == 0 ?
+      Drawer(
         child: ListView(
-          // padding: notchInset,
           children: [
             ListTile(
               leading: const Icon(Icons.list),
@@ -159,21 +191,29 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-      ),
+      ) : Container(),
 			
-			body: Center(
-				child: _pages[_currentPage],
-			),
+			body: bodyContent,
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddPage()),
-          );
-        },
-        backgroundColor: Colors.redAccent,
-        child: const Icon(Icons.add, color: Colors.white,),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: "List"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: "New"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: "Shedule"
+          )
+        ],
+
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.redAccent,
+        onTap: _onItemTapped,
       ),
 		);
   }    

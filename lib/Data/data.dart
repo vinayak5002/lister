@@ -12,9 +12,17 @@ import 'package:lister/Data/constanst.dart';
 class Data extends ChangeNotifier{
 
   var allShows = [
-    Show(malId: 20, title: "Naruto", epsCompleted: 190, epsTotal: 220, status: ShowStatus.completed, imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg", airStatus: AirStatus.finished, gogoName: ''),
-    Show(malId: 50380, title: "Paripi Koumei", epsCompleted: 8, epsTotal: 12, status: ShowStatus.watching, imageURL: "https://cdn.myanimelist.net/images/anime/1970/122297l.jpg", airStatus: AirStatus.finished, gogoName: ''),
-    // Show(malId: 44511, title: "Chainsaw Man", epsCompleted: 0, epsTotal: 24, status: ShowStatus.planned, imageURL: "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"),
+    Show(
+      malId: 20,
+      title: "Naruto",
+      epsCompleted: 190,
+      epsTotal: 220,
+      status: ShowStatus.completed,
+      imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
+      airStatus: AirStatus.finished,
+      gogoName: '',
+      updating: false
+    ),
   ];
 
   List<Show> watchingShows = [];
@@ -24,7 +32,7 @@ class Data extends ChangeNotifier{
   List<Show> completedShows = [];
 
   bool updatingAiringShows = false;
-  int updatingStatus = 0;
+  int updatingIndex = 0;
 
   Data() {
     allShows.clear();
@@ -52,11 +60,11 @@ class Data extends ChangeNotifier{
 
   void updateAiringShows() async{
     updatingAiringShows = true;
-    updatingStatus = 0;
+    updatingIndex = 0;
     notifyListeners();
 
     for(Show show in allShows){
-      updatingStatus++;
+      updatingIndex++;
       notifyListeners();
 
       if(show.gogoName == ""){

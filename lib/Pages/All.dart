@@ -47,54 +47,6 @@ class _AllState extends State<All> {
     else{
       return Column(
         children: [
-          Provider.of<Data>(context).updatingAiringShows ?
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Updating Shows",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      child: const SpinKitRing(color: Colors.redAccent, size: 40)
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-                child: StepProgressIndicator(
-                  totalSteps: Provider.of<Data>(context).allShows.length,
-                  currentStep: Provider.of<Data>(context).updatingStatus,
-                  size: 8,
-                  padding: 0,
-                  selectedColor: Colors.yellow,
-                  unselectedColor: Colors.cyan,
-                  roundedEdges: const Radius.circular(10),
-                  selectedGradientColor: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.blue, Colors.green],
-                  ),
-                  unselectedGradientColor: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.grey, Colors.grey],
-                  ),
-                ),
-              )
-            ],
-          ):
-          Container(),
-
           Expanded(
             child: ReorderableListView.builder(
           

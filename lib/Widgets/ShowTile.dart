@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -258,13 +259,33 @@ class _ShowTileState extends State<ShowTile> {
                           ],
                         ),
               
-                        const SizedBox(height: 5,),
+                        const SizedBox(height: 5),
               
-                        Text(
-                          "${widget.show.epsCompleted}/${widget.show.epsTotal}",
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              "${widget.show.epsCompleted}/${widget.show.epsTotal}",
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+
+                            const SizedBox(width: 10,),
+
+                            widget.show.airStatus == AirStatus.airing && 
+                            Provider.of<Data>(context).updatingAiringShows &&
+                            (Provider.of<Data>(context).updatingIndex <= Provider.of<Data>(context).allShows.indexOf(widget.show))
+                            ?
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 100),
+                              child: const SpinKitRing(
+                                color: Colors.redAccent,
+                                size: 15,
+                                lineWidth: 3,
+                                duration: Duration(milliseconds: 1000),
+                              )
+                            ) : Container(),
+                          ],
                         ),
               
                         Row(

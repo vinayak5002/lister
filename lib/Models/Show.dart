@@ -9,6 +9,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
+  bool updating;
 
   Show({
     required this.malId,
@@ -19,6 +20,7 @@ class Show{
     required this.imageURL,
     required this.airStatus,
     required this.gogoName,
+    required this.updating
   });
 
   int getEpsCompleted(){
@@ -43,12 +45,12 @@ class Show{
       status: ShowStatus.values[jsonData['status']],
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
-      gogoName: jsonData['gogoName']
+      gogoName: jsonData['gogoName'],
+      updating: false
     );
   }
 
   static Map<String, dynamic> toMap(Show show) {
-    print("Storing ${show.title} -- ${show.gogoName}");
     return {
     'malId': show.malId,
     'title': show.title,
@@ -57,7 +59,8 @@ class Show{
     'status': show.status.index,
     'imageURL': show.imageURL,
     'airStatus': show.airStatus.index,
-    'gogoName' : show.gogoName
+    'gogoName' : show.gogoName,
+    'updating' : show.updating
   };
   }
 }
