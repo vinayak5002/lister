@@ -21,7 +21,6 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
-      updating: false
     ),
   ];
 
