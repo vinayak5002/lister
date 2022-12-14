@@ -63,7 +63,7 @@ class Data extends ChangeNotifier{
     notifyListeners();
 
     for(Show show in allShows){
-      print('updaeAiringShows()');
+      print("Show: ${show.title} and lastUpdated: ${show.lastUpdated}");
       updatingIndex++;
       notifyListeners();
 
@@ -71,8 +71,7 @@ class Data extends ChangeNotifier{
         continue;
       }
 
-      Duration updationGap = show.lastUpdated.difference(DateTime.now());
-      print("${show.lastUpdated} $updationGap");
+      Duration updationGap = DateTime.now().difference(show.lastUpdated);
 
       if(show.airStatus != AirStatus.finished && updationGap.inDays >= 7 ){
 
@@ -103,11 +102,10 @@ class Data extends ChangeNotifier{
 
           show.airStatus = newAiringStatus;
           show.epsTotal = data['epstotal'];
-          show.lastUpdated = DateTime.now();
         }
+        show.lastUpdated = DateTime.now();
       }
       else{
-        print("passing ${show.title}");
         await Future.delayed(Duration(seconds: 1));
       }
     }

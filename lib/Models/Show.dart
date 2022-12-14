@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import './StatusEnum.dart';
 
 class Show{
@@ -9,7 +11,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  late DateTime lastUpdated = DateTime.now();
+  DateTime lastUpdated;
 
   Show({
     required this.malId,
@@ -20,7 +22,7 @@ class Show{
     required this.imageURL,
     required this.airStatus,
     required this.gogoName,
-    lastUpdated
+    required this.lastUpdated
   });
 
   int getEpsCompleted(){
@@ -33,8 +35,14 @@ class Show{
     }
   }
 
-  static fromMap(Map<String, dynamic> jsonData) {
-    
+  static fromMap(Map<String, dynamic> jsonData) {    
+    DateTime lastUpdated;
+    if(!jsonData.containsKey("lastUpdated")){
+      lastUpdated = DateTime(2003);
+    }
+    else{
+      lastUpdated = DateTime.parse(jsonData['lastUpdated']);
+    }
     return Show(
       malId: jsonData['malId'],
       title: jsonData['title'],
@@ -44,11 +52,14 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      lastUpdated: DateTime.parse(jsonData['lastUpdated'] ?? DateTime.now().toString())
+      lastUpdated: lastUpdated
     );
   }
 
   static Map<String, dynamic> toMap(Show show) {
+    if(show.lastUpdated == Null){
+      show.lastUpdated = DateTime(2003);
+    }
     return {
     'malId': show.malId,
     'title': show.title,
