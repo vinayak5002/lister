@@ -21,7 +21,6 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
-      lastUpdated: DateTime.now()
     ),
   ];
 
@@ -54,6 +53,7 @@ class Data extends ChangeNotifier{
     distribute();
 
     notifyListeners();
+
     updateAiringShows();
   }
 
@@ -63,7 +63,6 @@ class Data extends ChangeNotifier{
     notifyListeners();
 
     for(Show show in allShows){
-      print('updaeAiringShows()');
       updatingIndex++;
       notifyListeners();
 
@@ -71,10 +70,7 @@ class Data extends ChangeNotifier{
         continue;
       }
 
-      Duration updationGap = show.lastUpdated.difference(DateTime.now());
-      print("${show.lastUpdated} $updationGap");
-
-      if(show.airStatus != AirStatus.finished && updationGap.inDays >= 7 ){
+      if(show.airStatus != AirStatus.finished ){
 
         API.Response showstatus = await API.get(
           Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
@@ -103,12 +99,7 @@ class Data extends ChangeNotifier{
 
           show.airStatus = newAiringStatus;
           show.epsTotal = data['epstotal'];
-          show.lastUpdated = DateTime.now();
         }
-      }
-      else{
-        print("passing ${show.title}");
-        await Future.delayed(Duration(seconds: 1));
       }
     }
 
