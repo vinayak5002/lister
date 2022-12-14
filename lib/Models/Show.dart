@@ -11,7 +11,6 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  late DateTime lastUpdated = DateTime.now();
 
   Show({
     required this.malId,
@@ -21,8 +20,7 @@ class Show{
     required this.status,
     required this.imageURL,
     required this.airStatus,
-    required this.gogoName,
-    lastUpdated
+    required this.gogoName
   });
 
   int getEpsCompleted(){
@@ -36,7 +34,9 @@ class Show{
   }
 
   static fromMap(Map<String, dynamic> jsonData) {
-    
+
+    print("loading ${jsonData['title']} -- ${jsonData['gogoName']}");
+
     return Show(
       malId: jsonData['malId'],
       title: jsonData['title'],
@@ -46,7 +46,6 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      lastUpdated: DateTime.parse(jsonData['lastUpdated'] ?? DateTime.now().toString())
     );
   }
 
@@ -63,7 +62,6 @@ class Show{
     'imageURL': show.imageURL,
     'airStatus': show.airStatus.index,
     'gogoName' : show.gogoName,
-    'lastUpdated': show.lastUpdated.toString()
   };
   }
 }
