@@ -53,9 +53,6 @@ class Show{
   }
 
   static Map<String, dynamic> toMap(Show show) {
-    if(show.lastUpdated == Null){
-      show.lastUpdated = DateTime(2003);
-    }
     return {
     'malId': show.malId,
     'title': show.title,

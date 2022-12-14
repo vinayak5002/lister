@@ -101,7 +101,6 @@ class Data extends ChangeNotifier{
           show.airStatus = newAiringStatus;
           show.epsTotal = data['epstotal'];
         }
-        show.lastUpdated = DateTime.now();
       }
     }
 
