@@ -11,6 +11,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
+  bool updating;
 
   Show({
     required this.malId,
@@ -20,7 +21,8 @@ class Show{
     required this.status,
     required this.imageURL,
     required this.airStatus,
-    required this.gogoName
+    required this.gogoName,
+    required this.updating
   });
 
   int getEpsCompleted(){
@@ -46,6 +48,7 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
+      updating: false
     );
   }
 
@@ -62,6 +65,7 @@ class Show{
     'imageURL': show.imageURL,
     'airStatus': show.airStatus.index,
     'gogoName' : show.gogoName,
+    'updating' : show.updating
   };
   }
 }
