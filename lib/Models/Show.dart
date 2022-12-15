@@ -11,7 +11,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  DateTime lastUpdated;
+  DateTime lastUpdated = DateTime(2003);
 
   Show({
     required this.malId,
@@ -61,15 +61,15 @@ class Show{
       show.lastUpdated = DateTime(2003);
     }
     return {
-    'malId': show.malId,
-    'title': show.title,
-    'epsCompleted': show.epsCompleted,
-    'epsTotal': show.epsTotal,
-    'status': show.status.index,
-    'imageURL': show.imageURL,
-    'airStatus': show.airStatus.index,
-    'gogoName' : show.gogoName,
-    'lastUpdated': show.lastUpdated.toString()
-  };
+      'malId': show.malId,
+      'title': show.title,
+      'epsCompleted': show.epsCompleted,
+      'epsTotal': show.epsTotal,
+      'status': show.status.index,
+      'imageURL': show.imageURL,
+      'airStatus': show.airStatus.index,
+      'gogoName' : show.gogoName,
+      'lastUpdated': show.lastUpdated.toString()
+    };
   }
 }

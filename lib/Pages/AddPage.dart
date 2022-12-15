@@ -90,7 +90,7 @@ class _AddPageState extends State<AddPage> {
             imageURL: i['images']['jpg']['large_image_url'],
             airStatus: thisAirStatus,
             gogoName: ' ',
-            lastUpdated: DateTime.now()
+            lastUpdated: DateTime(2003),
           ));
           setState(() {});
         }

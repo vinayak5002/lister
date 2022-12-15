@@ -63,7 +63,6 @@ class Data extends ChangeNotifier{
     notifyListeners();
 
     for(Show show in allShows){
-      print("Show: ${show.title} and lastUpdated: ${show.lastUpdated}");
       updatingIndex++;
       notifyListeners();
 
@@ -74,6 +73,7 @@ class Data extends ChangeNotifier{
       Duration updationGap = DateTime.now().difference(show.lastUpdated);
 
       if(show.airStatus != AirStatus.finished && updationGap.inDays >= 7 ){
+        print("Updating");
 
         API.Response showstatus = await API.get(
           Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
@@ -83,31 +83,34 @@ class Data extends ChangeNotifier{
 
         var data = jsonDecode(jsonResponse);
 
-        if(data['error'] != true){
-          
-          AirStatus newAiringStatus = AirStatus.shedueled;
-          switch(data['status']){
-            case 'Ongoing':
-              newAiringStatus = AirStatus.airing;
-              break;
-            
-            case 'Upcomming':
-              newAiringStatus = AirStatus.shedueled;
-              break;
-            
-            case 'Completed':
-              newAiringStatus = AirStatus.finished;
-              break;
-          }
+        print("Fetch sucessfull");
 
-          show.airStatus = newAiringStatus;
-          show.epsTotal = data['epstotal'];
+        AirStatus newAiringStatus = AirStatus.shedueled;
+        switch(data['status']){
+          case 'Ongoing':
+            newAiringStatus = AirStatus.airing;
+            break;
+          
+          case 'Upcomming':
+            newAiringStatus = AirStatus.shedueled;
+            break;
+          
+          case 'Completed':
+            newAiringStatus = AirStatus.finished;
+            break;
         }
+
+        show.airStatus = newAiringStatus;
+        print("https://lister-api.onrender.com/${show.gogoName}");
+        show.epsTotal = data['epstotal'];
+        print("Updating episode count");
         show.lastUpdated = DateTime.now();
       }
       else{
+        print("Passing");
         await Future.delayed(Duration(seconds: 1));
       }
+      print("Show: ${show.title} and lastUpdated: ${show.lastUpdated}, difference in days : ${updationGap.inDays}");
     }
 
     updatingAiringShows = false;
