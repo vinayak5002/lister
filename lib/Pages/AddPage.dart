@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:lister/Widgets/SearchTile.dart';
 import 'package:http/http.dart' as API ;
-import 'package:lister/Data/constanst.dart';
+import 'package:lister/Data/constant.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../Models/Show.dart';
@@ -90,6 +90,7 @@ class _AddPageState extends State<AddPage> {
             imageURL: i['images']['jpg']['large_image_url'],
             airStatus: thisAirStatus,
             gogoName: ' ',
+            airingDay: DateTime.now() as DateTime,
           ));
           setState(() {});
         }

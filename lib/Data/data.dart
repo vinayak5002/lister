@@ -7,7 +7,7 @@ import '../Models/Show.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as API ;
-import 'package:lister/Data/constanst.dart';
+import 'package:lister/Data/constant.dart';
 
 class Data extends ChangeNotifier{
 
@@ -21,6 +21,7 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
+      airingDay: DateTime.now()
     ),
   ];
 
@@ -61,6 +62,7 @@ class Data extends ChangeNotifier{
     updatingAiringShows = true;
     updatingIndex = 0;
     notifyListeners();
+    DateTime thisDay = DateTime.now();
 
     for(Show show in allShows){
       updatingIndex++;
@@ -70,7 +72,9 @@ class Data extends ChangeNotifier{
         continue;
       }
 
-      if(show.airStatus != AirStatus.finished ){
+
+      if(show.airStatus != AirStatus.finished && show.airingDay.weekday == thisDay.weekday ){
+        print("Updating");
 
         API.Response showstatus = await API.get(
           Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
@@ -80,26 +84,31 @@ class Data extends ChangeNotifier{
 
         var data = jsonDecode(jsonResponse);
 
-        if(data['error'] != true){
-          
-          AirStatus newAiringStatus = AirStatus.shedueled;
-          switch(data['status']){
-            case 'Ongoing':
-              newAiringStatus = AirStatus.airing;
-              break;
-            
-            case 'Upcomming':
-              newAiringStatus = AirStatus.shedueled;
-              break;
-            
-            case 'Completed':
-              newAiringStatus = AirStatus.finished;
-              break;
-          }
+        print("Fetch sucessfull");
 
-          show.airStatus = newAiringStatus;
-          show.epsTotal = data['epstotal'];
+        AirStatus newAiringStatus = AirStatus.shedueled;
+        switch(data['status']){
+          case 'Ongoing':
+            newAiringStatus = AirStatus.airing;
+            break;
+          
+          case 'Upcomming':
+            newAiringStatus = AirStatus.shedueled;
+            break;
+          
+          case 'Completed':
+            newAiringStatus = AirStatus.finished;
+            break;
         }
+        show.airStatus = newAiringStatus;
+        print("https://lister-api.onrender.com/${show.gogoName}");
+        show.epsTotal = data['epstotal'];
+        print("Updating episode count");
+
+      }
+      else{
+        print("Passing");
+        await Future.delayed(Duration(seconds: 1));
       }
     }
 

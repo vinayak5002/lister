@@ -7,7 +7,7 @@ import 'package:lister/Data/data.dart';
 import 'package:provider/provider.dart';
 
 
-import '../Data/constanst.dart';
+import '../Data/constant.dart';
 import '../Models/Show.dart';
 
 
@@ -50,6 +50,35 @@ class _MoreDetailsState extends State<MoreDetails> {
       data = data['data'];
       eps = data['episodes'];
     });
+
+    //TODO: update airingDay of the Show
+    if(data['airing'] == true){
+      String day = data['broadcast']['string'].split(' ')[2];
+
+      switch(day){
+        case "Mondays":{
+          widget.show.airingDay = DateTime.monday as DateTime;
+        } break;
+        case "Tuesdays":{
+          widget.show.airingDay = DateTime.tuesday as DateTime;
+        } break;
+        case "Wednesdays":{
+          widget.show.airingDay = DateTime.wednesday as DateTime;
+        } break;
+        case "Thursdays":{
+          widget.show.airingDay = DateTime.thursday as DateTime;
+        } break;
+        case "Fridays":{
+          widget.show.airingDay = DateTime.friday as DateTime;
+        } break;
+        case "Saturdays":{
+          widget.show.airingDay = DateTime.saturday as DateTime;
+        } break;
+        case "Sundays":{
+          widget.show.airingDay = DateTime.sunday as DateTime;
+        }
+      }
+    }
   }
 
   List<Widget> getBody(){
