@@ -21,7 +21,6 @@ class Show{
     required this.airStatus,
     required this.gogoName,
     required this.airingDay
-    required this.gogoName
   });
 
   int getEpsCompleted(){
