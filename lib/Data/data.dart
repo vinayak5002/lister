@@ -7,7 +7,7 @@ import '../Models/Show.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as API ;
-import 'package:lister/Data/constanst.dart';
+import 'package:lister/Data/constant.dart';
 
 class Data extends ChangeNotifier{
 
@@ -21,7 +21,7 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
-      lastUpdated: DateTime.now()
+      airingDay: DateTime.now()
     ),
   ];
 
@@ -61,6 +61,7 @@ class Data extends ChangeNotifier{
     updatingAiringShows = true;
     updatingIndex = 0;
     notifyListeners();
+    DateTime thisDay = DateTime.now();
 
     for(Show show in allShows){
       updatingIndex++;
@@ -70,9 +71,7 @@ class Data extends ChangeNotifier{
         continue;
       }
 
-      Duration updationGap = DateTime.now().difference(show.lastUpdated);
-
-      if(show.airStatus != AirStatus.finished && updationGap.inDays >= 7 ){
+      if(show.airStatus != AirStatus.finished && show.airingDay.weekday == thisDay.weekday ){
         print("Updating");
 
         API.Response showstatus = await API.get(
@@ -104,13 +103,12 @@ class Data extends ChangeNotifier{
         print("https://lister-api.onrender.com/${show.gogoName}");
         show.epsTotal = data['epstotal'];
         print("Updating episode count");
-        show.lastUpdated = DateTime.now();
+
       }
       else{
         print("Passing");
         await Future.delayed(Duration(seconds: 1));
       }
-      print("Show: ${show.title} and lastUpdated: ${show.lastUpdated}, difference in days : ${updationGap.inDays}");
     }
 
     updatingAiringShows = false;
