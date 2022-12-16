@@ -54,6 +54,7 @@ class Data extends ChangeNotifier{
     distribute();
 
     notifyListeners();
+
     updateAiringShows();
   }
 
@@ -70,6 +71,7 @@ class Data extends ChangeNotifier{
       if(show.gogoName == ""){
         continue;
       }
+
 
       if(show.airStatus != AirStatus.finished && show.airingDay.weekday == thisDay.weekday ){
         print("Updating");
@@ -98,7 +100,6 @@ class Data extends ChangeNotifier{
             newAiringStatus = AirStatus.finished;
             break;
         }
-
         show.airStatus = newAiringStatus;
         print("https://lister-api.onrender.com/${show.gogoName}");
         show.epsTotal = data['epstotal'];

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import './StatusEnum.dart';
 
 class Show{
@@ -23,6 +21,7 @@ class Show{
     required this.airStatus,
     required this.gogoName,
     required this.airingDay
+    required this.gogoName
   });
 
   int getEpsCompleted(){
@@ -43,6 +42,7 @@ class Show{
     else{
       airingday = DateTime.parse(jsonData['lastUpdated']);
     }
+
     return Show(
       malId: jsonData['malId'],
       title: jsonData['title'],
