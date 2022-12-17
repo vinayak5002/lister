@@ -50,9 +50,10 @@ class _MoreDetailsState extends State<MoreDetails> {
       data = data['data'];
       eps = data['episodes'];
     });
-    print("Updating airDay");
     if(data['airing'] == true){
+      print("Updating airDay");
       String day = data['broadcast']['string'].split(' ')[0];
+      print(day);
       switch(day){
         case "Mondays":{
           widget.show.airWeekDay = 1;
@@ -70,6 +71,7 @@ class _MoreDetailsState extends State<MoreDetails> {
           widget.show.airWeekDay = 5;
         } break;
         case "Saturdays":{
+          print("Saturday");
           widget.show.airWeekDay = 6;
         } break;
         case "Sundays":{
@@ -202,6 +204,7 @@ class _MoreDetailsState extends State<MoreDetails> {
         !widget.fromMain ?
          FloatingActionButton(
           onPressed: (){
+            print("Before addShow: ${widget.show.airWeekDay}");
             Provider.of<Data>(context, listen: false).addShow(widget.show);
             Navigator.pop(context);
           },

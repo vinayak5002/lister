@@ -1,5 +1,4 @@
 import './StatusEnum.dart';
-import 'VizzDateTime.dart';
 
 class Show{
   int malId;
@@ -10,7 +9,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  int airWeekDay = 0;
+  int airWeekDay;
 
   Show({
     required this.malId,
@@ -34,14 +33,7 @@ class Show{
     }
   }
 
-  static fromMap(Map<String, dynamic> jsonData) {    
-    int airWeekDay;
-    if(!jsonData.containsKey("lastUpdated")){
-      airWeekDay = 0;
-    }
-    else{
-      airWeekDay = jsonData['lastUpdated'] as int;
-    }
+  static fromMap(Map<String, dynamic> jsonData) {
 
     return Show(
       malId: jsonData['malId'],
@@ -52,14 +44,11 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      airWeekDay: airWeekDay
+      airWeekDay: int.parse(jsonData['airingDay'])
     );
   }
 
   static Map<String, dynamic> toMap(Show show) {
-    if(show.airWeekDay == Null){
-      show.airWeekDay = 0;
-    }
     return {
       'malId': show.malId,
       'title': show.title,
