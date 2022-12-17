@@ -54,13 +54,10 @@ class Data extends ChangeNotifier{
     distribute();
 
     notifyListeners();
-
     updateAiringShows();
   }
 
   Future<Show> updateShow(Show show) async {
-    updatingAiringShows = true;
-    updatingIndex = 0;
     print("Updating ${show.title}");
 
     API.Response showStatus = await API.get(
@@ -91,7 +88,6 @@ class Data extends ChangeNotifier{
     print("https://lister-api.onrender.com/${show.gogoName}");
     show.epsTotal = data['epstotal'];
     print("Updating episode count");
-    updatingAiringShows = false;
     return show;
   }
 
@@ -102,13 +98,12 @@ class Data extends ChangeNotifier{
     DateTime thisDay = DateTime.now();
 
     for(Show show in allShows){
-      updatingIndex++;
       notifyListeners();
 
       if(show.gogoName == ""){
         continue;
       }
-
+      print("Show: ${show.title}, airweekDay: ${show.airWeekDay}, thisDay: ${thisDay.weekday}");
       if(show.airStatus != AirStatus.finished && (show.airWeekDay == thisDay.weekday) ){
         show = await updateShow(show);
       }
@@ -116,6 +111,7 @@ class Data extends ChangeNotifier{
         print("Passing ${show.title}: ");
         await Future.delayed(const Duration(seconds: 1));
       }
+      updatingIndex++;
     }
 
     updatingAiringShows = false;
@@ -269,7 +265,9 @@ class Data extends ChangeNotifier{
       allShows.insert(0, show);
       distribute();
       notifyListeners();
-      updateShow(show);
+      updatingAiringShows = true;
+      await updateShow(show);
+      updatingAiringShows = false;
       saveAllShows();
       updateAiringShows();
     }

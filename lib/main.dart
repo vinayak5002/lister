@@ -22,12 +22,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Data();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: Data(),
+        ChangeNotifierProvider(
+          create: (context) => Data(),
         ),
       ],
       child: MaterialApp(
