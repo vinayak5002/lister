@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lister/Data/data.dart';
 import 'package:lister/Pages/All.dart';
+import 'package:lister/Pages/shedulePage.dart';
 import 'package:provider/provider.dart';
 
 import 'Pages/AddPage.dart';
@@ -56,15 +57,22 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = newIndex;
     });
 
+    if(newIndex == 0){
+      bodyContent = Center(
+        child: _pages[_currentPage],
+      );
+    }
+
     if(newIndex == 1){
       setState(() {
         bodyContent = const AddPage();
       });
     }
-    if(newIndex == 0){
-      bodyContent = Center(
-        child: _pages[_currentPage],
-      );
+
+    if(newIndex == 2){
+      setState(() {
+        bodyContent = const ShedulePage();
+      });
     }
   } 
 
