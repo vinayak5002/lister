@@ -50,34 +50,35 @@ class _MoreDetailsState extends State<MoreDetails> {
       data = data['data'];
       eps = data['episodes'];
     });
-
-    //TODO: update airingDay of the Show
     if(data['airing'] == true){
-      String day = data['broadcast']['string'].split(' ')[2];
-
+      print("Updating airDay");
+      String day = data['broadcast']['string'].split(' ')[0];
+      print(day);
       switch(day){
         case "Mondays":{
-          widget.show.airingDay = DateTime.monday as DateTime;
+          widget.show.airWeekDay = 1;
         } break;
         case "Tuesdays":{
-          widget.show.airingDay = DateTime.tuesday as DateTime;
+          widget.show.airWeekDay = 2;
         } break;
         case "Wednesdays":{
-          widget.show.airingDay = DateTime.wednesday as DateTime;
+          widget.show.airWeekDay = 3;
         } break;
         case "Thursdays":{
-          widget.show.airingDay = DateTime.thursday as DateTime;
+          widget.show.airWeekDay = 4;
         } break;
         case "Fridays":{
-          widget.show.airingDay = DateTime.friday as DateTime;
+          widget.show.airWeekDay = 5;
         } break;
         case "Saturdays":{
-          widget.show.airingDay = DateTime.saturday as DateTime;
+          print("Saturday");
+          widget.show.airWeekDay = 6;
         } break;
         case "Sundays":{
-          widget.show.airingDay = DateTime.sunday as DateTime;
-        }
+          widget.show.airWeekDay = 7;
+        } break;
       }
+      print("Updated day: ${widget.show.airWeekDay}");
     }
   }
 
@@ -203,6 +204,7 @@ class _MoreDetailsState extends State<MoreDetails> {
         !widget.fromMain ?
          FloatingActionButton(
           onPressed: (){
+            print("Before addShow: ${widget.show.airWeekDay}");
             Provider.of<Data>(context, listen: false).addShow(widget.show);
             Navigator.pop(context);
           },

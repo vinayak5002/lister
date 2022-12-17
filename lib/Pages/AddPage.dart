@@ -90,7 +90,7 @@ class _AddPageState extends State<AddPage> {
             imageURL: i['images']['jpg']['large_image_url'],
             airStatus: thisAirStatus,
             gogoName: ' ',
-            airingDay: DateTime.now() as DateTime,
+            airWeekDay: 0
           ));
           setState(() {});
         }

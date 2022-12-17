@@ -9,7 +9,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  DateTime airingDay = DateTime.now();
+  int airWeekDay;
 
   Show({
     required this.malId,
@@ -20,7 +20,7 @@ class Show{
     required this.imageURL,
     required this.airStatus,
     required this.gogoName,
-    required this.airingDay
+    required this.airWeekDay
   });
 
   int getEpsCompleted(){
@@ -33,14 +33,7 @@ class Show{
     }
   }
 
-  static fromMap(Map<String, dynamic> jsonData) {    
-    DateTime airingday;
-    if(!jsonData.containsKey("lastUpdated")){
-      airingday = DateTime(2003);
-    }
-    else{
-      airingday = DateTime.parse(jsonData['lastUpdated']);
-    }
+  static fromMap(Map<String, dynamic> jsonData) {
 
     return Show(
       malId: jsonData['malId'],
@@ -51,14 +44,11 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      airingDay: airingday
+      airWeekDay: int.parse(jsonData['airingDay'])
     );
   }
 
   static Map<String, dynamic> toMap(Show show) {
-    if(show.airingDay == Null){
-      show.airingDay = DateTime.now().weekday as DateTime;
-    }
     return {
       'malId': show.malId,
       'title': show.title,
@@ -68,7 +58,7 @@ class Show{
       'imageURL': show.imageURL,
       'airStatus': show.airStatus.index,
       'gogoName' : show.gogoName,
-      'airingDay': show.airingDay.toString()
+      'airingDay': show.airWeekDay.toString()
     };
   }
 }
