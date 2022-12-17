@@ -274,7 +274,7 @@ class _ShowTileState extends State<ShowTile> {
 
                             widget.show.airStatus == AirStatus.airing && 
                             Provider.of<Data>(context).updatingAiringShows &&
-                            (Provider.of<Data>(context).updatingIndex <= Provider.of<Data>(context).allShows.indexOf(widget.show) || Provider.of<Data>(context).allShows.indexOf(widget.show) == 0 )
+                            (Provider.of<Data>(context).updatingIndex <= Provider.of<Data>(context).allShows.indexOf(widget.show) || Provider.of<Data>(context).updatingIndex == 1 )
                             ?
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 100),

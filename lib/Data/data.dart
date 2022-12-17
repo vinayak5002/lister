@@ -109,13 +109,12 @@ class Data extends ChangeNotifier{
         continue;
       }
 
-
       if(show.airStatus != AirStatus.finished && (show.airWeekDay == thisDay.weekday) ){
         show = await updateShow(show);
       }
       else{
         print("Passing ${show.title}: ");
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
       }
     }
 
