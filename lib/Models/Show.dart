@@ -1,4 +1,5 @@
 import './StatusEnum.dart';
+import 'VizzDateTime.dart';
 
 class Show{
   int malId;
@@ -9,7 +10,7 @@ class Show{
   String imageURL;
   AirStatus airStatus;
   String gogoName;
-  DateTime airingDay = DateTime.now();
+  int airWeekDay = 0;
 
   Show({
     required this.malId,
@@ -20,7 +21,7 @@ class Show{
     required this.imageURL,
     required this.airStatus,
     required this.gogoName,
-    required this.airingDay
+    required this.airWeekDay
   });
 
   int getEpsCompleted(){
@@ -34,12 +35,12 @@ class Show{
   }
 
   static fromMap(Map<String, dynamic> jsonData) {    
-    DateTime airingday;
+    int airWeekDay;
     if(!jsonData.containsKey("lastUpdated")){
-      airingday = DateTime(2003);
+      airWeekDay = 0;
     }
     else{
-      airingday = DateTime.parse(jsonData['lastUpdated']);
+      airWeekDay = jsonData['lastUpdated'] as int;
     }
 
     return Show(
@@ -51,13 +52,13 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      airingDay: airingday
+      airWeekDay: airWeekDay
     );
   }
 
   static Map<String, dynamic> toMap(Show show) {
-    if(show.airingDay == Null){
-      show.airingDay = DateTime.now().weekday as DateTime;
+    if(show.airWeekDay == Null){
+      show.airWeekDay = 0;
     }
     return {
       'malId': show.malId,
@@ -68,7 +69,7 @@ class Show{
       'imageURL': show.imageURL,
       'airStatus': show.airStatus.index,
       'gogoName' : show.gogoName,
-      'airingDay': show.airingDay.toString()
+      'airingDay': show.airWeekDay.toString()
     };
   }
 }

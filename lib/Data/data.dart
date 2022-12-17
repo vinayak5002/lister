@@ -21,7 +21,7 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
-      airingDay: DateTime.now()
+      airWeekDay: 0
     ),
   ];
 
@@ -58,6 +58,43 @@ class Data extends ChangeNotifier{
     updateAiringShows();
   }
 
+  Future<Show> updateShow(Show show) async {
+    updatingAiringShows = true;
+    updatingIndex = 0;
+    print("Updating ${show.title}");
+
+    API.Response showStatus = await API.get(
+        Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
+    );
+
+    var jsonResponse = showStatus.body;
+
+    var data = jsonDecode(jsonResponse);
+
+    print("Fetch sucessfull");
+
+    AirStatus newAiringStatus = AirStatus.shedueled;
+    switch(data['status']){
+      case 'Ongoing':
+        newAiringStatus = AirStatus.airing;
+        break;
+
+      case 'Upcomming':
+        newAiringStatus = AirStatus.shedueled;
+        break;
+
+      case 'Completed':
+        newAiringStatus = AirStatus.finished;
+        break;
+    }
+    show.airStatus = newAiringStatus;
+    print("https://lister-api.onrender.com/${show.gogoName}");
+    show.epsTotal = data['epstotal'];
+    print("Updating episode count");
+    updatingAiringShows = false;
+    return show;
+  }
+
   void updateAiringShows() async{
     updatingAiringShows = true;
     updatingIndex = 0;
@@ -73,41 +110,11 @@ class Data extends ChangeNotifier{
       }
 
 
-      if(show.airStatus != AirStatus.finished && show.airingDay.weekday == thisDay.weekday ){
-        print("Updating");
-
-        API.Response showstatus = await API.get(
-          Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
-        );
-
-        var jsonResponse = showstatus.body;
-
-        var data = jsonDecode(jsonResponse);
-
-        print("Fetch sucessfull");
-
-        AirStatus newAiringStatus = AirStatus.shedueled;
-        switch(data['status']){
-          case 'Ongoing':
-            newAiringStatus = AirStatus.airing;
-            break;
-          
-          case 'Upcomming':
-            newAiringStatus = AirStatus.shedueled;
-            break;
-          
-          case 'Completed':
-            newAiringStatus = AirStatus.finished;
-            break;
-        }
-        show.airStatus = newAiringStatus;
-        print("https://lister-api.onrender.com/${show.gogoName}");
-        show.epsTotal = data['epstotal'];
-        print("Updating episode count");
-
+      if(show.airStatus != AirStatus.finished && (show.airWeekDay == thisDay.weekday) ){
+        show = await updateShow(show);
       }
       else{
-        print("Passing");
+        print("Passing ${show.title}: ");
         await Future.delayed(Duration(seconds: 1));
       }
     }
@@ -263,6 +270,7 @@ class Data extends ChangeNotifier{
       allShows.insert(0, show);
       distribute();
       notifyListeners();
+      updateShow(show);
       saveAllShows();
       updateAiringShows();
     }
