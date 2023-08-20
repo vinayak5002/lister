@@ -214,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: "Shedule"
+            label: "Schedule"
           )
         ],
 

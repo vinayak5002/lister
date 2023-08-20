@@ -34,8 +34,8 @@ class _ShedulePageState extends State<ShedulePage> {
 
     for(Show show in shows){
       if( show.airStatus == AirStatus.airing){
-        schedule[show.airingDay.weekday]?.add(show);
-        print("Added show ${show.title}, ${show.airingDay.weekday}");
+        schedule[show.airWeekDay]?.add(show);
+        print("Added show ${show.title}, ${show.airWeekDay}");
       }
     }
     return ListView(
