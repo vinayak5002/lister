@@ -10,6 +10,7 @@ class Show{
   AirStatus airStatus;
   String gogoName;
   int airWeekDay;
+  DateTime lastUpdated;
 
   Show({
     required this.malId,
@@ -20,7 +21,8 @@ class Show{
     required this.imageURL,
     required this.airStatus,
     required this.gogoName,
-    required this.airWeekDay
+    required this.airWeekDay,
+    required this.lastUpdated
   });
 
   int getEpsCompleted(){
@@ -44,7 +46,8 @@ class Show{
       imageURL: jsonData['imageURL'],
       airStatus: AirStatus.values[jsonData['airStatus']],
       gogoName: jsonData['gogoName'],
-      airWeekDay: int.parse(jsonData['airingDay'])
+      airWeekDay: int.parse(jsonData['airingDay']),
+      lastUpdated: DateTime.parse(jsonData['lastUpdated'])
     );
   }
 
@@ -58,7 +61,8 @@ class Show{
       'imageURL': show.imageURL,
       'airStatus': show.airStatus.index,
       'gogoName' : show.gogoName,
-      'airingDay': show.airWeekDay.toString()
+      'airingDay': show.airWeekDay.toString(),
+      'lastUpdated' : show.lastUpdated.toString()
     };
   }
 }

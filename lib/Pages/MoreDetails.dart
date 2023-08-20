@@ -50,36 +50,6 @@ class _MoreDetailsState extends State<MoreDetails> {
       data = data['data'];
       eps = data['episodes'];
     });
-    if(data['airing'] == true){
-      print("Updating airDay");
-      String day = data['broadcast']['string'].split(' ')[0];
-      print(day);
-      switch(day){
-        case "Mondays":{
-          widget.show.airWeekDay = 1;
-        } break;
-        case "Tuesdays":{
-          widget.show.airWeekDay = 2;
-        } break;
-        case "Wednesdays":{
-          widget.show.airWeekDay = 3;
-        } break;
-        case "Thursdays":{
-          widget.show.airWeekDay = 4;
-        } break;
-        case "Fridays":{
-          widget.show.airWeekDay = 5;
-        } break;
-        case "Saturdays":{
-          print("Saturday");
-          widget.show.airWeekDay = 6;
-        } break;
-        case "Sundays":{
-          widget.show.airWeekDay = 7;
-        } break;
-      }
-      print("Updated day: ${widget.show.airWeekDay}");
-    }
   }
 
   List<Widget> getBody(){

@@ -68,6 +68,7 @@ class _AddPageState extends State<AddPage> {
         for(var i in data){
 
           AirStatus thisAirStatus;
+          int thisAirWeekDay = 0;
 
           if(i['airing'] == false){
             if(i['status'] == "Not yet aired"){
@@ -81,6 +82,34 @@ class _AddPageState extends State<AddPage> {
             thisAirStatus = AirStatus.airing;
           }
 
+          if(thisAirStatus == AirStatus.airing){
+            switch (i['broadcast']['day']) {
+              case "Mondays":
+                thisAirWeekDay = 1;
+                break;
+              case "Tuesdays":
+                thisAirWeekDay = 2;
+                break;
+              case "Wednesdays":
+                thisAirWeekDay = 3;
+                break;
+              case "Thursdays":
+                thisAirWeekDay = 4;
+                break;
+              case "Fridays":
+                thisAirWeekDay = 5;
+                break;
+              case "Saturdays":
+                thisAirWeekDay = 6;
+                break;
+              case "Sundays":
+                thisAirWeekDay = 7;
+                break;
+              default:
+                thisAirWeekDay = 0;
+            }
+          }
+
           searchShows.add(Show(
             malId: i['mal_id'],
             title: i['title'],
@@ -89,8 +118,9 @@ class _AddPageState extends State<AddPage> {
             status: ShowStatus.planned,
             imageURL: i['images']['jpg']['large_image_url'],
             airStatus: thisAirStatus,
-            gogoName: ' ',
-            airWeekDay: 0
+            gogoName: " ",
+            airWeekDay: thisAirWeekDay,
+            lastUpdated: DateTime.now()
           ));
           setState(() {});
         }

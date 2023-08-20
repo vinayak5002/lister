@@ -21,7 +21,8 @@ class Data extends ChangeNotifier{
       imageURL: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg",
       airStatus: AirStatus.finished,
       gogoName: '',
-      airWeekDay: 0
+      airWeekDay: 0,
+      lastUpdated: DateTime.now()
     ),
   ];
 
@@ -59,9 +60,10 @@ class Data extends ChangeNotifier{
 
   Future<Show> updateShow(Show show) async {
     print("Updating ${show.title}");
+    print("Fetching $kListerApiURL${show.gogoName}");
 
     API.Response showStatus = await API.get(
-        Uri.parse("https://lister-api.onrender.com/${show.gogoName}")
+        Uri.parse("$kListerApiURL${show.gogoName}")
     );
 
     var jsonResponse = showStatus.body;
@@ -85,9 +87,8 @@ class Data extends ChangeNotifier{
         break;
     }
     show.airStatus = newAiringStatus;
-    print("https://lister-api.onrender.com/${show.gogoName}");
-    show.epsTotal = data['epstotal'];
-    print("Updating episode count");
+    show.epsTotal = data['epCount'];
+    show.lastUpdated = DateTime.now();
     return show;
   }
 
@@ -104,7 +105,8 @@ class Data extends ChangeNotifier{
         continue;
       }
       print("Show: ${show.title}, airweekDay: ${show.airWeekDay}, thisDay: ${thisDay.weekday}");
-      if(show.airStatus != AirStatus.finished && (show.airWeekDay == thisDay.weekday) ){
+      int daysPasses = DateTime.now().difference(show.lastUpdated).inDays;
+      if(show.airStatus != AirStatus.finished && (show.airWeekDay == thisDay.weekday || daysPasses >= 7) ){
         show = await updateShow(show);
       }
       else{
@@ -239,8 +241,7 @@ class Data extends ChangeNotifier{
 
     for(Show sh in allShows){
       if(sh.malId == show.malId){
-        exists = true;
-        break;
+        return;
       }
     }
 
@@ -257,8 +258,6 @@ class Data extends ChangeNotifier{
         var data = jsonDecode(jsonResponse);
 
         show.gogoName = data[0]['animeId'];
-        saveAllShows();
-
       }
 
       show.status = ShowStatus.planned;
