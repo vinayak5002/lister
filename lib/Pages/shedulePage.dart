@@ -7,14 +7,16 @@ import 'package:lister/Models/Show.dart';
 import 'package:lister/Models/StatusEnum.dart';
 import 'package:provider/provider.dart';
 
-class ShedulePage extends StatefulWidget {
-  const ShedulePage({Key? key}) : super(key: key);
+import '../Widgets/scheduleShowTile.dart';
+
+class SchedulePage extends StatefulWidget {
+  const SchedulePage({Key? key}) : super(key: key);
 
   @override
-  _ShedulePageState createState() => _ShedulePageState();
+  _SchedulePageState createState() => _SchedulePageState();
 }
 
-class _ShedulePageState extends State<ShedulePage> {
+class _SchedulePageState extends State<SchedulePage> {
 
   Map<int, List<Show>> schedule = HashMap();
 
@@ -40,13 +42,13 @@ class _ShedulePageState extends State<ShedulePage> {
     }
     return ListView(
       children: [
-        WeekTile(weekday: "Sunday", dayShows: schedule[7]),
-        WeekTile(weekday: "Monday", dayShows: schedule[1]),
-        WeekTile(weekday: "Tuesday", dayShows: schedule[2],),
-        WeekTile(weekday: "Wednesday", dayShows: schedule[3],),
-        WeekTile(weekday: "Thursday", dayShows: schedule[4],),
-        WeekTile(weekday: "Friday", dayShows: schedule[5],),
-        WeekTile(weekday: "Saturday", dayShows: schedule[6],)
+        WeekTile(weekday: "Sunday", dayShows: schedule[7] ?? []),
+        WeekTile(weekday: "Monday", dayShows: schedule[1] ?? []),
+        WeekTile(weekday: "Tuesday", dayShows: schedule[2] ?? []),
+        WeekTile(weekday: "Wednesday", dayShows: schedule[3]?? []),
+        WeekTile(weekday: "Thursday", dayShows: schedule[4] ?? []),
+        WeekTile(weekday: "Friday", dayShows: schedule[5] ?? []),
+        WeekTile(weekday: "Saturday", dayShows: schedule[6] ?? [])
       ]
     );
   }
@@ -55,7 +57,7 @@ class _ShedulePageState extends State<ShedulePage> {
 class WeekTile extends StatefulWidget {
   String weekday;
 
-  List<Show>? dayShows;
+  List<Show> dayShows;
 
   WeekTile({Key? key, required this.weekday, required this.dayShows}) : super(key: key);
 
@@ -68,20 +70,27 @@ class _WeekTileState extends State<WeekTile> {
   Widget build(BuildContext context) {
     // print("shows lenght ${widget.dayShows![0].imageURL}");
     return Container(
-      width: 100000,
+      // width: 100000,
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Card(
         color: const Color.fromRGBO(33, 33, 33, 1),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-          child: Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(widget.weekday),
-                  widget.dayShows!.isNotEmpty ? Text(widget.dayShows![0].title) : Text("Empty")
-                ],
-              )
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(widget.weekday, style: const TextStyle(color: Colors.white, fontSize: 20)),
+                const SizedBox(height: 10),
+                widget.dayShows.isNotEmpty ?
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: widget.dayShows.map((show) => ScheduleShowTile(show: show)).toList(),
+                  ),
+                ) : const Text("Empty")
+              ],
+            )
           )
         )
       )

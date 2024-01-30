@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if(newIndex == 2){
       setState(() {
-        bodyContent = const ShedulePage();
+        bodyContent = const SchedulePage();
       });
     }
   } 
